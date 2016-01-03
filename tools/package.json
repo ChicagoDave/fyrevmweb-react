@@ -1,0 +1,11 @@
+{
+  "name": "chester",
+  "description": "A tool to test fyrevm channels in a fyrevm story file.",
+  "version": "0.0.1",
+  "dependencies": {
+    "glulx-typescript": "chicagodave/glulx-typescript"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}
