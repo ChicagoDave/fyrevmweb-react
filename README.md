@@ -77,12 +77,18 @@ Command line utility to run FyreVM stories. See chester directory for more infor
     $ chester file1.ulx file2.ulx commandsFile [-diffsOnly]
 
     $ chester ifpress1.ulx ifpress2.ulx commands.txt
+    
     ifpress1.MAIN.1: Now is the time for all good men to come to the aid of their country.
+    
     ifpress2.MAIN.1: Now is the time for all good men to come to the aid of their country.
+    
     results: green
 
+    
     ifpress1.PLOG.1: This is the way to Fantasia.
+    
     ifpress2.PLOG.1: This is the way to your destruction.
+    
     results: red
 
     ...
