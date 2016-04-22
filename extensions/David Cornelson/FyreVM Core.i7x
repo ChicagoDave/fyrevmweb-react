@@ -1360,7 +1360,7 @@ To Request Transition:
 
 Chapter 6 - Story Info
 
-Every turn when outputting channels (this is the story info channel rule):
+When play begins while outputting channels (this is the story information rule):
 	select the story info channel;
 	say "{ storyTitle: [quotation mark][story title][quotation mark], storyHeadline: [quotation mark][story headline][quotation mark], storyAuthor: [quotation mark][story author][quotation mark], storyCreationYear: [quotation mark][story creation year][quotation mark], releaseNumber: [quotation mark][release number][quotation mark], serialNumber: [quotation mark][story serial number][quotation mark], inform7Build: [quotation mark][I7 version number][quotation mark], inform6Library: [quotation mark][I6 library number][quotation mark], inform7Library: [quotation mark][I7 library number][quotation mark], strictMode: [quotation mark][strict mode][quotation mark], debugMode: [quotation mark][debug mode][quotation mark] }";
 	select the main channel.
