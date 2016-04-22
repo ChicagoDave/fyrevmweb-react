@@ -68,9 +68,9 @@ Simple I7 story with FyreVM extensions enabled.
 
 Command line utility to run FyreVM stories. See chester directory for more information.
 
-## ROADMAP
+### Road Map
 
-### Add regression testing capabilities to chester
+#### Add regression testing capabilities to chester
 
 * Designate two story files and a list of commands to run, displaying colored diffs (by word) for each command.
 
@@ -87,7 +87,7 @@ Command line utility to run FyreVM stories. See chester directory for more infor
 
     ...
 
-### Build out Stop the IF Press! sample project with more channels
+#### Build out Stop the IF Press! sample project with more channels
 
 * Add an inventory channel
 * Add a hint channel
