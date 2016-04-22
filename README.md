@@ -67,3 +67,31 @@ Simple I7 story with FyreVM extensions enabled.
 ### Chester
 
 Command line utility to run FyreVM stories. See chester directory for more information.
+
+## ROADMAP
+
+### Add regression testing capabilities to chester
+
+* Designate two story files and a list of commands to run, displaying colored diffs (by word) for each command.
+
+    $ chester file1.ulx file2.ulx commandsFile [-diffsOnly]
+
+    $ chester ifpress1.ulx ifpress2.ulx commands.txt
+    ifpress1.MAIN.1: Now is the time for all good men to come to the aid of their country.
+    ifpress2.MAIN.1: Now is the time for all good men to come to the aid of their country.
+    results: green
+
+    ifpress1.PLOG.1: This is the way to Fantasia.
+    ifpress2.PLOG.1: This is the way to your destruction.
+    results: red
+
+    ...
+
+### Build out Stop the IF Press! sample project with more channels
+
+* Add an inventory channel
+* Add a hint channel
+* Add a help channel
+* Add a tutorial channel
+* Add a sounds channel
+* Add an images channel
