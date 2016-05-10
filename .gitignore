@@ -7,3 +7,4 @@
 /projects/Stop the IFPress!.inform/Skein.skein
 /projects/Stop the IFPress!.inform/Build
 node_modules
+*.js
