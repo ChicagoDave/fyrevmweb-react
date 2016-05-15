@@ -8,3 +8,6 @@
 /projects/Stop the IFPress!.inform/Build
 node_modules
 *.js
+/glulx-typescript/*.js
+/glulx-typescript/*.map
+*.js.map

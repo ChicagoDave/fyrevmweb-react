@@ -48,7 +48,7 @@ module FyreVMWeb {
 
         private wrapper: FyreVM.EngineWrapper;
         private saveKey: string;
-        private quetzalData: string;
+        private quetzalData: FyreVM.Quetzal;
 
         LoadStory(url: string) {
             var reader = new XMLHttpRequest();
@@ -59,14 +59,13 @@ module FyreVMWeb {
                 setTimeout( () => this.ProcessCommand(this.wrapper.run()), 0);
             }
             reader.send()
-
         }
 
         SendCommand(command: string) {
             setTimeout( () => this.ProcessCommand(this.wrapper.receiveLine(command)), 0)
         }
 
-        ProcessCommand(result: FyreVM.EngineWrapperState) {
+        private ProcessCommand(result: FyreVM.EngineWrapperState) {
             this.Status = StoryStatus.CONTINUE;
 
             switch (result.state) {
@@ -82,23 +81,19 @@ module FyreVMWeb {
                 case FyreVM.EngineState.waitingForLoadSaveGame:
                     this.saveKey = `fyrevm_saved_game_${Base64.fromByteArray(this.wrapper.getIFhd())}`;
                     this.quetzalData = localStorage[this.saveKey];
-                    if (this.quetzalData) {
-                        this.quetzalData = FyreVM.Quetzal.base64Decode(this.quetzalData)
-                    }
                     setTimeout(() => this.ProcessCommand(this.wrapper.receiveSavedGame(this.quetzalData)),0);
                     break;
                 case FyreVM.EngineState.waitingForGameSavedConfirmation:
                     let saveKey = `fyrevm_saved_game_${Base64.fromByteArray(result.gameBeingSaved.getIFhdChunk())}`;
                     let quetzalData = result.gameBeingSaved.base64Encode();
-                    localStorage[key] = q;
+                    localStorage[saveKey] = quetzalData;
                     setTimeout(
-                        () => process(w.saveGameDone(true))
+                        () => this.ProcessCommand(this.wrapper.saveGameDone(true))
                         , 0);
                     break;
                 default:
                     this.EngineState = result.state;
                     break;
-
             }
 
             this.OutputReady(result.channelData);
