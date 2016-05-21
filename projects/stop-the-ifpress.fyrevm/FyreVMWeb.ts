@@ -1,12 +1,12 @@
 /*
-    FyreVMWeb.ts
+ FyreVMWeb.ts
 
-    Main Module to run FyreVM web engine (glulx-typescript).
+ Main Module to run FyreVM web engine (glulx-typescript).
 
-    Exposes onReady event for web page to get data.
-    Exposes sendCommand function for web pages to execute command.
+ Exposes OutputReady event for web page to get data.
+ Exposes sendCommand function for web pages to execute command.
 
-*/
+ */
 
 /// <reference path='../../glulx-typescript/EngineWrapper.ts' />
 
@@ -22,10 +22,6 @@ module FyreVMWeb {
         ENDED = 1
     }
 
-    export interface OutputReadyEvent {
-        (channelData: FyreVM.ChannelData): void;
-    }
-
     export interface FyreVMManager {
         LoadStory(url: string);
         SendCommand(command: string): void;
@@ -33,7 +29,7 @@ module FyreVMWeb {
         WaitingFor: InputType;
         Status: StoryStatus;
         SessionData: FyreVM.Quetzal;
-        OutputReady: OutputReadyEvent;
+        OutputReady();
         EngineState: number;
     }
 
@@ -43,7 +39,7 @@ module FyreVMWeb {
         WaitingFor: InputType;
         Status: StoryStatus;
         SessionData: FyreVM.Quetzal;
-        OutputReady: OutputReadyEvent;
+        OutputReady: () => { };
         EngineState: number;
 
         private wrapper: FyreVM.EngineWrapper;
@@ -54,9 +50,11 @@ module FyreVMWeb {
             var reader = new XMLHttpRequest();
             reader.open('GET', url);
             reader.responseType = 'arraybuffer';
-            if (reader.readyState === XMLHttpRequest.DONE) {
-                this.wrapper = FyreVM.EngineWrapper.loadFromArrayBuffer(reader.response, true);
-                setTimeout( () => this.ProcessCommand(this.wrapper.run()), 0);
+            reader.onreadystatechange = () => {
+                if (reader.readyState === XMLHttpRequest.DONE) {
+                    this.wrapper = FyreVM.EngineWrapper.loadFromArrayBuffer(reader.response, true);
+                    this.ProcessCommand(this.wrapper.run());
+                }
             }
             reader.send()
         }
@@ -67,6 +65,10 @@ module FyreVMWeb {
 
         private ProcessCommand(result: FyreVM.EngineWrapperState) {
             this.Status = StoryStatus.CONTINUE;
+
+            this.ChannelData = result.channelData;
+
+            this.UpdateContent();
 
             switch (result.state) {
                 case FyreVM.EngineState.waitingForKeyInput:
@@ -96,7 +98,38 @@ module FyreVMWeb {
                     break;
             }
 
-            this.OutputReady(result.channelData);
+            this.OutputReady();
+        }
+
+        private UpdateContent() {
+
+            if (this.ChannelData["CMGT"] != undefined) {
+
+                var contentDef = this.ChannelData["CMGT"].split(';');
+
+                document["fyrevm"] = {};
+
+                for (var channelName in this.ChannelData) {
+
+                    for (var channelDef in contentDef) {
+                        var channelDetails = contentDef[channelDef].split(',');
+                        if (channelDetails[0] == channelName) {
+
+                            switch (channelDetails[1]) {
+                                case "text":
+                                    document["fyrevm"][channelDetails[2]] = this.ChannelData[channelName];
+                                    break;
+                                case "number":
+                                    document["fyrevm"][channelDetails[2]] = Number(this.ChannelData[channelName]);
+                                    break;
+                                case "json":
+                                    document["fyrevm"][channelDetails[2]] = JSON.parse(this.ChannelData[channelName]);
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 }

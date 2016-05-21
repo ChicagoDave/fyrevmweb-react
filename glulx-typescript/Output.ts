@@ -201,18 +201,20 @@ module FyreVM {
 		getChannel(): string{
 			return this.channel;
 		}
-		
+
 		/**  If the output channel is changed to any channel other than
-        * "MAIN", the channel's contents will be
-        * cleared first.
-		*/
+		 * "MAIN", the undefined channel will be initialized.
+		 */
 		setChannel(c: string){
 			if (c === this.channel) return;
 			this.channel = c;
 			if (c !== 'MAIN'){
-				this.channelData[c] = '';	
+				if (this.channelData[c] == undefined) {
+					this.channelData[c] = '';
+				}
 			}
 		}
+
 		
 		/** 
 		 * Writes a string to the buffer for the currently

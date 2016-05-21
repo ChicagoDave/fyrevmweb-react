@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "out": "stop-the-ifpress.js"
+  },
+  "files": [
+    "../FyreVMWeb.ts"
+  ]
+}

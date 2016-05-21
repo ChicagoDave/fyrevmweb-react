@@ -1,0 +1,102 @@
+<html>
+<!--
+// Written in 2016 by Thilo Planz 
+// To the extent possible under law, I have dedicated all copyright and related and neighboring rights 
+// to this software to the public domain worldwide. This software is distributed without any warranty. 
+// http://creativecommons.org/publicdomain/zero/1.0/	
+-->	
+<head>
+    <script src="stop-the-ifpress.js" ></script>
+	<style>
+		.header { display: inline-block; width: 30%; }
+		body { padding-top: 40px; padding-left: 200px; padding-right: 200px;}
+		#status { 
+			background-color: black; 
+			color: yellow; 
+			width: 500px;
+			height: 20pt; 
+			font-size: 16pt; 
+			text-align: center;
+			position: fixed;
+			top: 0;
+			}
+		#MAIN { height: 75%; overflow: scroll; margin: 20px 0; white-space: pre-wrap}
+	</style>
+</head>	
+	
+<body>
+	<div id='status'>Loading ...</div>
+	<h1 id='LOCN'></h1>
+	<div>
+		<b id='SCOR' class='header'></b>
+		<b id='TURN' class='header'></b>
+		<b id='TIME' class='header'></b>	
+	</div>
+	<div id='MAIN'></div>
+	<div id='PRPT'></div>	
+</body>	
+
+<script>
+	
+function OutputReady() {
+
+	var channelData = manager.ChannelData;
+
+	if (channelData) {
+		if (channelData.MAIN){
+			setText('MAIN',channelData.MAIN);
+		}
+		if (channelData.LOCN){
+			setText('LOCN', channelData.LOCN);
+		}
+		if (channelData.SCOR || +c.SCOR === 0){
+			setText('SCOR', "Score: "+channelData.SCOR);
+		}
+		if (channelData.TURN){
+			setText('TURN', "Turn: "+channelData.TURN);
+		}
+		if (channelData.TIME){
+			setText('TIME', Math.floor(+channelData.TIME / 100) +":"+ (+channelData.TIME % 100));
+		}
+		if (channelData.PRPT){
+			promptLine = channelData.PRPT;
+		}	
+	}
+	// waiting for key or line input ?
+	var wait = manager.WaitingFor
+	if (wait === 0 || wait === 1){
+		getInput()
+	}
+}
+
+var promptLine = "";
+
+function getInput(){
+	var div = document.getElementById('PRPT');
+	div.innerHTML = '<form onsubmit="sendCommand(); return false;">'+promptLine+' <input size="80"/><form>';
+	var input = div.getElementsByTagName('INPUT')[0];
+	input.focus();
+	input.scrollIntoView();	
+}
+	
+function sendCommand(){
+    var div = document.getElementById('PRPT');
+    var input = div.getElementsByTagName('INPUT')[0];
+    var command = input.value;
+    div.innerHTML = '';
+    setText('status', 'processing ...');
+    setText('MAIN', '\n\n\n... '+command);
+    manager.SendCommand(command)
+ }
+
+	
+function setText(id, text){
+	document.getElementById(id).textContent = text
+}
+
+
+var manager = new FyreVMWeb.Manager();
+manager.OutputReady = OutputReady;
+manager.LoadStory("stop-the-ifpress.ulx")
+</script>	
+</html>
