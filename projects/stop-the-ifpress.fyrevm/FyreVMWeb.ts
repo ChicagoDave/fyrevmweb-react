@@ -45,6 +45,7 @@ module FyreVMWeb {
         private wrapper: FyreVM.EngineWrapper;
         private saveKey: string;
         private quetzalData: FyreVM.Quetzal;
+        private contentDefinition: string[];
 
         LoadStory(url: string) {
             var reader = new XMLHttpRequest();
@@ -103,16 +104,21 @@ module FyreVMWeb {
 
         private UpdateContent() {
 
-            if (this.ChannelData["CMGT"] != undefined) {
+            if (this.ChannelData["CMGT"] != undefined || this.contentDefinition != undefined) {
 
-                var contentDef = this.ChannelData["CMGT"].split(';');
+                //
+                // We only get the content definition on first turn... (may need to revisit this)
+                //
+                if (this.contentDefinition == undefined) {
+                    this.contentDefinition = this.ChannelData["CMGT"].split(';');
+                }
 
                 document["fyrevm"] = {};
 
                 for (var channelName in this.ChannelData) {
 
-                    for (var channelDef in contentDef) {
-                        var channelDetails = contentDef[channelDef].split(',');
+                    for (var channelDef in this.contentDefinition) {
+                        var channelDetails = this.contentDefinition[channelDef].split(',');
                         if (channelDetails[0] == channelName) {
 
                             switch (channelDetails[1]) {
