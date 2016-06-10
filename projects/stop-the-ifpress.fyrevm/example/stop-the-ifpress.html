@@ -10,7 +10,7 @@
 	<style>
 		.header { display: inline-block; width: 30%; }
 		body { padding-top: 40px; padding-left: 200px; padding-right: 200px;}
-		#status { 
+		#statusLine {
 			background-color: black; 
 			color: yellow; 
 			width: 500px;
@@ -20,83 +20,59 @@
 			position: fixed;
 			top: 0;
 			}
-		#MAIN { height: 75%; overflow: scroll; margin: 20px 0; white-space: pre-wrap}
+		#mainContent { height: 75%; overflow-y: scroll; margin: 20px 0; white-space: pre-wrap}
 	</style>
 </head>	
 	
 <body>
-	<div id='status'>Loading ...</div>
-	<h1 id='LOCN'></h1>
-	<div>
-		<b id='SCOR' class='header'></b>
-		<b id='TURN' class='header'></b>
-		<b id='TIME' class='header'></b>	
+	<h1 id='locationName'></h1>
+	<div id='statusLine'>
+		<b id='score' class='header'></b>
+		<b id='turn' class='header'></b>
+		<b id='time' class='header'></b>
 	</div>
-	<div id='MAIN'></div>
-	<div id='PRPT'></div>	
-</body>	
+	<div id='mainContent'></div>
+    <div id='commandLine'></div>
+</body>
 
 <script>
 	
-function OutputReady() {
+    var manager = new FyreVMWeb.Manager();
+    var storyInfo = null;
+    manager.OutputReady = function() {
 
-	var channelData = manager.ChannelData;
+        // rebind data...
+        document.getElementById('mainContent').innerText = document.fyrevm.mainContent;
+        document.getElementById('score').innerText = document.fyrevm.score;
+        document.getElementById('turn').innerText = document.fyrevm.turn;
+        document.getElementById('time').innerText = document.fyrevm.time;
 
-	if (channelData) {
-		if (channelData.MAIN){
-			setText('MAIN',channelData.MAIN);
-		}
-		if (channelData.LOCN){
-			setText('LOCN', channelData.LOCN);
-		}
-		if (channelData.SCOR || +c.SCOR === 0){
-			setText('SCOR', "Score: "+channelData.SCOR);
-		}
-		if (channelData.TURN){
-			setText('TURN', "Turn: "+channelData.TURN);
-		}
-		if (channelData.TIME){
-			setText('TIME', Math.floor(+channelData.TIME / 100) +":"+ (+channelData.TIME % 100));
-		}
-		if (channelData.PRPT){
-			promptLine = channelData.PRPT;
-		}	
-	}
-	// waiting for key or line input ?
-	var wait = manager.WaitingFor
-	if (wait === 0 || wait === 1){
-		getInput()
-	}
-}
+        if (document.fyrevm.prologueContent == undefined) {
+            document.getElementById('prologueContent').innerText = '';
+        } else {
+            document.getElementById('prologueContent').innerText = document.fyrevm.prologueContent;
+        }
 
-var promptLine = "";
+        // process anything interesting...
+        processStoryInfo();
 
-function getInput(){
-	var div = document.getElementById('PRPT');
-	div.innerHTML = '<form onsubmit="sendCommand(); return false;">'+promptLine+' <input size="80"/><form>';
-	var input = div.getElementsByTagName('INPUT')[0];
-	input.focus();
-	input.scrollIntoView();	
-}
-	
-function sendCommand(){
-    var div = document.getElementById('PRPT');
-    var input = div.getElementsByTagName('INPUT')[0];
-    var command = input.value;
-    div.innerHTML = '';
-    setText('status', 'processing ...');
-    setText('MAIN', '\n\n\n... '+command);
-    manager.SendCommand(command)
- }
+        // reset command line...
+        manager.InputElement.setFocus();
+    };
 
-	
-function setText(id, text){
-	document.getElementById(id).textContent = text
-}
+    // set the input element...
+    manager.InputElement = document.getElementById('commandLine');
 
+    // load the story...
+    manager.LoadStory("stop-the-ifpress.ulx")
 
-var manager = new FyreVMWeb.Manager();
-manager.OutputReady = OutputReady;
-manager.LoadStory("stop-the-ifpress.ulx")
-</script>	
+    function processStoryInfo() {
+        // cache the story info...
+        if (document.fyrevm.storyInfo != undefined) {
+            storyInfo = document.fyrevm.storyInfo;
+        }
+    }
+
+</script>
+
 </html>

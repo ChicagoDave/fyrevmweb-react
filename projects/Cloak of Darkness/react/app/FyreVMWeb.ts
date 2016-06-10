@@ -8,7 +8,7 @@
 
  */
 
-/// <reference path='../../glulx-typescript/EngineWrapper.ts' />
+/// <reference path='../../../../glulx-typescript/EngineWrapper.ts' />
 
 module FyreVMWeb {
 
@@ -29,19 +29,19 @@ module FyreVMWeb {
         WaitingFor: InputType;
         Status: StoryStatus;
         SessionData: FyreVM.Quetzal;
-        OutputReady(): void;
+        OutputReady();
         EngineState: number;
     }
 
-    export class Manager implements FyreVMManager {
+    export class Manager implements  FyreVMManager {
 
         ChannelData: FyreVM.ChannelData;
         WaitingFor: InputType;
         Status: StoryStatus;
         SessionData: FyreVM.Quetzal;
-        OutputReady(): void;
+        OutputReady: () => { };
         EngineState: number;
-        InputElement: Element;
+        InputElement: HTMLInputElement;
 
         private wrapper: FyreVM.EngineWrapper;
         private saveKey: string;
@@ -56,10 +56,10 @@ module FyreVMWeb {
 
             this.InputElement.onkeypress = function(e) {
                 if (this.WaitingFor == this.InputType.WAITING_FOR_KEY) {
-                    manager.SendCommand(this.InputElement.innerText);
+                    this.wrapper.SendCommand(this.InputElement.innerText);
                 } else {
                     if (e.keyCode == 13) {
-                        manager.SendCommand(this.InputElement.innerText);
+                        this.wrapper.SendCommand(this.InputElement.innerText);
                     }
                 }
             };
