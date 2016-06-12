@@ -3,7 +3,7 @@
 // to this software to the public domain worldwide. This software is distributed without any warranty. 
 // http://creativecommons.org/publicdomain/zero/1.0/
 
-/// <reference path='../dictionary.ts' />
+/// <reference path='dictionary.ts' />
 /// <reference path='Opcodes.ts' />
 /// <reference path='Output.ts' />
 /// <reference path='UlxImage.ts' />

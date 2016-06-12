@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "out": "FyreVMWeb.js"
+  },
+  "files": [
+    "FyreVMWeb.ts"
+  ]
+}

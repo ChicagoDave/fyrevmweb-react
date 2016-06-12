@@ -10,6 +10,8 @@
 
 /// <reference path='glulx-typescript/EngineWrapper.ts' />
 
+var fyrevm = {};
+
 module FyreVMWeb {
 
     export enum InputType {
@@ -22,26 +24,26 @@ module FyreVMWeb {
         ENDED = 1
     }
 
-    export interface FyreVMManager {
-        LoadStory(url: string);
-        SendCommand(command: string): void;
+    // export interface FyreVMManager {
+    //     LoadStory(url: string);
+    //     SendCommand(command: string): void;
+    //     ChannelData: FyreVM.ChannelData;
+    //     WaitingFor: InputType;
+    //     Status: StoryStatus;
+    //     SessionData: FyreVM.Quetzal;
+    //     OutputReady: () => void;
+    //     EngineState: number;
+    // }
+
+    export class Manager {
+
         ChannelData: FyreVM.ChannelData;
         WaitingFor: InputType;
         Status: StoryStatus;
         SessionData: FyreVM.Quetzal;
-        OutputReady(): void;
+        OutputReady: () => void;
         EngineState: number;
-    }
-
-    export class Manager implements FyreVMManager {
-
-        ChannelData: FyreVM.ChannelData;
-        WaitingFor: InputType;
-        Status: StoryStatus;
-        SessionData: FyreVM.Quetzal;
-        OutputReady(): void;
-        EngineState: number;
-        InputElement: Element;
+        InputElement: HTMLInputElement;
 
         private wrapper: FyreVM.EngineWrapper;
         private saveKey: string;
@@ -54,12 +56,12 @@ module FyreVMWeb {
                 throw "FyreVM.Manager.InputElement must be defined before loading a story.";
             }
 
-            this.InputElement.onkeypress = function(e) {
-                if (this.WaitingFor == this.InputType.WAITING_FOR_KEY) {
-                    manager.SendCommand(this.InputElement.innerText);
+            this.InputElement.onkeypress = (e)=> {
+                if (this.WaitingFor == FyreVMWeb.InputType.WAITING_FOR_KEY) {
+                    this.SendCommand(this.InputElement.value);
                 } else {
                     if (e.keyCode == 13) {
-                        manager.SendCommand(this.InputElement.innerText);
+                        this.SendCommand(this.InputElement.value);
                     }
                 }
             };
@@ -80,8 +82,8 @@ module FyreVMWeb {
             setTimeout( () => this.ProcessCommand(this.wrapper.receiveLine(command)), 0)
         }
 
-        private ProcessCommand(result: FyreVM.EngineWrapperState) {
-            this.Status = StoryStatus.CONTINUE;
+        public ProcessCommand(result: FyreVM.EngineWrapperState) {
+            this.Status = FyreVMWeb.StoryStatus.CONTINUE;
 
             this.ChannelData = result.channelData;
 
@@ -89,13 +91,13 @@ module FyreVMWeb {
 
             switch (result.state) {
                 case FyreVM.EngineState.waitingForKeyInput:
-                    this.WaitingFor = InputType.WAITING_FOR_KEY;
+                    this.WaitingFor = FyreVMWeb.InputType.WAITING_FOR_KEY;
                     break;
                 case FyreVM.EngineState.waitingForLineInput:
-                    this.WaitingFor = InputType.WAITING_FOR_LINE;
+                    this.WaitingFor = FyreVMWeb.InputType.WAITING_FOR_LINE;
                     break;
                 case FyreVM.EngineState.completed:
-                    this.Status = StoryStatus.ENDED;
+                    this.Status = FyreVMWeb.StoryStatus.ENDED;
                     break;
                 case FyreVM.EngineState.waitingForLoadSaveGame:
                     this.saveKey = `fyrevm_saved_game_${Base64.fromByteArray(this.wrapper.getIFhd())}`;
@@ -116,6 +118,14 @@ module FyreVMWeb {
             this.OutputReady();
         }
 
+        private GetChannelName(x:number){
+            return String.fromCharCode(
+                x >> 24,
+                (x >> 16) & 0xFF,
+                (x >> 8) & 0xFF,
+                x & 0xFF);
+        }
+
         private UpdateContent() {
             if (this.ChannelData["CMGT"] != undefined || this.contentDefinition != undefined) {
 
@@ -126,23 +136,24 @@ module FyreVMWeb {
                     this.contentDefinition = this.ChannelData["CMGT"].split(';');
                 }
 
-                document["fyrevm"] = {};
+                fyrevm = {};
 
                 for (var channelName in this.ChannelData) {
 
                     for (var channelDef in this.contentDefinition) {
                         var channelDetails = this.contentDefinition[channelDef].split(',');
-                        if (channelDetails[0] == channelName) {
+                        var chanName = this.GetChannelName(Number(channelDetails[0]));
+                        if (chanName == channelName) {
 
                             switch (channelDetails[1]) {
                                 case "text":
-                                    document["fyrevm"][channelDetails[2]] = this.ChannelData[channelName];
+                                    fyrevm[channelDetails[2]] = this.ChannelData[channelName];
                                     break;
                                 case "number":
-                                    document["fyrevm"][channelDetails[2]] = Number(this.ChannelData[channelName]);
+                                    fyrevm[channelDetails[2]] = Number(this.ChannelData[channelName]);
                                     break;
                                 case "json":
-                                    document["fyrevm"][channelDetails[2]] = JSON.parse(this.ChannelData[channelName]);
+                                    fyrevm[channelDetails[2]] = JSON.parse(this.ChannelData[channelName]);
                             }
                         }
                     }
