@@ -4,7 +4,7 @@ Include FyreVM Core by David Cornelson.
 Include FyreVM Banner Output by David Cornelson.
 Include FyreVM Prologue by David Cornelson.
 
-The story headline is "A basic IF demonstration using FyreVM."
+The story headline is "A basic IF demonstration using FyreVM".
 The story creation year is 2016.
 
 Rule for printing the banner text when outputting channels:
@@ -14,9 +14,7 @@ Rule for printing the banner text when outputting channels:
 	say "Release [release number] / Serial number [story serial number] / Inform 7 Build [I7 version number] (I6 lib/v[I6 library number] lib [I7 library number] [strict mode][debug mode])[line break]";
 
 When play begins while outputting channels (this is the prologue channel rule):
-	select the prologue channel;
-	say "[paragraph break]Hurrying through the rainswept November night,	you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?";
-	select the main channel.
+	say "[on prologue-channel][paragraph break]Hurrying through the rainswept November night,	you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?[end]".
 
 Use scoring.
 

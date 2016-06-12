@@ -29,16 +29,34 @@ Constant FY_SETVENEER = 6;
 !
 ! Required Channels for FY_CHANNEL.
 !
-Constant FYC_MAIN = ('M' * $1000000) + ('A' * $10000) + ('I' * $100) + 'N';				! MAIN
-Constant FYC_PROMPT = ('P' * $1000000) + ('R' * $10000) + ('P' * $100) + 'T';			! PRPT
-Constant FYC_LOCATION = ('L' * $1000000) + ('O' * $10000) + ('C' * $100) + 'N';			! LOCN
-Constant FYC_SCORE = ('S' * $1000000) + ('C' * $10000) + ('O' * $100) + 'R';			! SCOR
-Constant FYC_TIME = ('T' * $1000000) + ('I' * $10000) + ('M' * $100) + 'E';				! TIME
-Constant FYC_DEATH = ('D' * $1000000) + ('E' * $10000) + ('A' * $100) + 'D';			! DEAD
-Constant FYC_ENDGAME = ('E' * $1000000) + ('N' * $10000) + ('D' * $100) + 'G';			! ENDG
-Constant FYC_TURN = ('T' * $1000000) + ('U' * $10000) + ('R' * $100) + 'N';				! TURN
-Constant FYC_STORYINFO = ('I' * $1000000) + ('N' * $10000) + ('F' * $100) + 'O';		! INFO
-Constant FYC_SCORENOTIFY = ('S' * $1000000) + ('N' * $10000) + ('O' * $100) + 'T';		! SNOT
+Global next_id = 0;
+
+[ GetNextId id;
+  if (next_id >= 26*26) {
+	  print "*** GetNextId: out of channel identifiers ***^";
+	  next_id = 0;
+  }
+  id = ('Z' * $1000000) + ('Z' * $10000) + (('A' + next_id / 26) * $100) + ('A' + next_id % 26);
+  next_id++;
+  return id;
+];
+
+[ SET_CHANNEL channel_number;
+	if (is_fyrevm) FyreCall(FY_CHANNEL, channel_number);
+];
+
+! These are for internal use...
+Constant FYC_MAIN = ('M' * $1000000) + ('A' * $10000) + ('I' * $100) + 'N';	! MAIN
+Constant FYC_PROMPT = ('P' * $1000000) + ('R' * $10000) + ('P' * $100) + 'T';	! PRPT
+Constant FYC_LOCATION = ('L' * $1000000) + ('O' * $10000) + ('C' * $100) + 'N';	! LOCN
+Constant FYC_SCORE = ('S' * $1000000) + ('C' * $10000) + ('O' * $100) + 'R';	! SCOR
+Constant FYC_TIME = ('T' * $1000000) + ('I' * $10000) + ('M' * $100) + 'E';	! TIME
+Constant FYC_DEATH = ('D' * $1000000) + ('E' * $10000) + ('A' * $100) + 'D';	! DEAD
+Constant FYC_ENDGAME = ('E' * $1000000) + ('N' * $10000) + ('D' * $100) + 'G';	! ENDG
+Constant FYC_TURN = ('T' * $1000000) + ('U' * $10000) + ('R' * $100) + 'N';	! TURN
+Constant FYC_STORYINFO = ('I' * $1000000) + ('N' * $10000) + ('F' * $100) + 'O';	! INFO
+Constant FYC_SCORENOTIFY = ('S' * $1000000) + ('N' * $10000) + ('O' * $100) + 'T';	! SNOT
+Constant FYC_CONTENT_MANAGEMENT = ('C' * $1000000) + ('M' * $10000) + ('G' * $100) + 'T';  	! CMGT
 
 ! Slots for FY_SETVENEER.
 Constant FYV_Z__Region = 1;
@@ -1285,13 +1303,52 @@ To decide whether outputting channels: (- (is_fyrevm) -);
 
 Chapter 4 - Channel Rules
 
-Section 1a - Required Channels - For Release Only
+Section 0 - Dynamic new channels
+
+To decide which number is the next channel id:
+	(- GetNextId() -).
+
+A channel is a kind of thing. A channel has a number called id. A channel has some text called content name. A channel has some text called content type.
+
+main-channel is a channel with id 1296124238 and content name "mainContent" and content type "text".
+prompt-channel is a channel with id 1347571796 and content name "prompt" and content type "text".
+location-channel is a channel with id 1280262990 and content name "locationName" and content type "text".
+score-channel is a channel with id 1396920146 and content name "score" and content type "number".
+time-channel is a channel with id 1414090053 and content name "time" and content type "text".
+death-channel is a channel with id 1145389380 and content name "deathContent" and content type "text".
+endgame-channel is a channel with id 1162757191 and content name "endGameContent" and content type "text".
+turn-channel is a channel with id 1414877774 and content name "turn" and content type "number".
+storyInfo-channel is a channel with id 1229866575 and content name "storyInfo" and content type "json".
+scoreNotify-channel is a channel with id 1397641044 and content name "scoreNotify" and content type "text".
+contentManagement-channel is a channel with id 1129138004 and content name "contentTypes" and content type "text".
+
+When play begins:
+	repeat with chan running through list of channels:
+		let id be the id of chan;
+		if id is 0:
+			now the id of chan is the next channel id;
+		say "[on contentManagement-channel][id of chan],[content type of chan],[content name of chan];[end]";
+
+To say on (C - channel) -- beginning say_channel -- running on: select C.
+To say end -- ending say_channel -- running on: select the main channel. 
+
+To select (chan - channel):
+	let id be the id of chan;
+	set channelid to id.
+	
+To set channelid to (id - number):
+	(- SET_CHANNEL({id}); -).
+
+To Select the Content Management Channel:
+	select contentManagement-channel.
+
+Section 1a - Required Channels 
 
 To Select the Main Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_MAIN); -).
+	select main-channel.
 
 To Select the Prompt Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_PROMPT); -).
+	select prompt-channel.
 
 To Change the Prompt to (T - text):
 	Select the Prompt Channel;
@@ -1299,59 +1356,25 @@ To Change the Prompt to (T - text):
 	Select the Main Channel.
 
 To Select the Location Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_LOCATION); -).
+	select location-channel.
 
 To Select the Score Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_SCORE); -).
+	select score-channel.
 
 To Select the Time Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_TIME); -).
+	select time-channel.
 
 To Select the Death Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_DEATH); -).
+	select death-channel.
 
 To Select the Turn Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_TURN); -).
+	select turn-channel.
 
 To Select the Story Info Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_STORYINFO); -);
+	select storyInfo-channel.
 
 To Select the Score Notification Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_SCORENOTIFY); -);
-
-Section 1b - Required Channels - Not For Release
-
-To Select the Main Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_MAIN); else print "** Main Channel ON **"; -).
-
-To Select the Prompt Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_PROMPT); else print "** Prompt Channel ON **"; -).
-
-To Change the Prompt to (T - text):
-	Select the Prompt Channel;
-	say T;
-	Select the Main Channel.
-
-To Select the Location Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_LOCATION); else print "** Location Channel ON **"; -).
-
-To Select the Score Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_SCORE); else print "** Score Channel ON **"; -).
-
-To Select the Time Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_TIME); else print "** Time Channel ON **"; -).
-
-To Select the Death Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_DEATH); else print "** Death Channel ON **"; -).
-
-To Select the Turn Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_TURN); else print "** Turn Channel ON **"; -).
-
-To Select the Story Info Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_STORYINFO); else print "** Story Info channel ON **";  -);
-
-To Select the Score Notification Channel:
-	(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_SCORENOTIFY); else print "** Score Notification channel ON **";  -);
+	select scoreNotify-channel.
 
 Chapter 5 - Transition Requested
 
@@ -1360,10 +1383,14 @@ To Request Transition:
 
 Chapter 6 - Story Info
 
-When play begins while outputting channels (this is the story information rule):
-	select the story info channel;
-	say "{ storyTitle: [quotation mark][story title][quotation mark], storyHeadline: [quotation mark][story headline][quotation mark], storyAuthor: [quotation mark][story author][quotation mark], storyCreationYear: [quotation mark][story creation year][quotation mark], releaseNumber: [quotation mark][release number][quotation mark], serialNumber: [quotation mark][story serial number][quotation mark], inform7Build: [quotation mark][I7 version number][quotation mark], inform6Library: [quotation mark][I6 library number][quotation mark], inform7Library: [quotation mark][I7 library number][quotation mark], strictMode: [quotation mark][strict mode][quotation mark], debugMode: [quotation mark][debug mode][quotation mark] }";
-	select the main channel.
+When play begins:
+	write story info.
+
+Every turn while outputting channels (this is the story information rule):
+	write story info.
+
+To write story info:
+	say "[on storyInfo-channel]{ [quotation mark]storyTitle[quotation mark]: [quotation mark][story title][quotation mark], [quotation mark]storyHeadline[quotation mark]: [quotation mark][story headline][quotation mark], [quotation mark]storyAuthor[quotation mark]: [quotation mark][story author][quotation mark], [quotation mark]storyCreationYear[quotation mark]: [quotation mark][story creation year][quotation mark], [quotation mark]releaseNumber[quotation mark]: [quotation mark][release number][quotation mark], [quotation mark]serialNumber[quotation mark]: [quotation mark][story serial number][quotation mark], [quotation mark]inform7Build[quotation mark]: [quotation mark][I7 version number][quotation mark], [quotation mark]inform6Library[quotation mark]: [quotation mark][I6 library number][quotation mark], [quotation mark]inform7Library[quotation mark]: [quotation mark][I7 library number][quotation mark], [quotation mark]strictMode[quotation mark]: [quotation mark][strict mode][quotation mark], [quotation mark]debugMode[quotation mark]: [quotation mark][debug mode][quotation mark] }[end]".
 
 Chapter 7 - Miscellany
 
@@ -1382,34 +1409,37 @@ FyreVM Core is the base extension for Glulx+Channel IO web applications.
 
 The Channels system provides text communication from the engine to the user interface. The first six channels (main, prompt, location, score, time, and death) are required and are adapted from the standard outputs of Inform 7. There are several default channels added for convenience. These include: title, credits, prologue, turn, hint, help, error, and version.
 
-The author can add any channel they wish using the following steps:
+The author can add their own channel with one step:
 
-1. Add an Inform 6 constant for the new channel (the example here is SOND or four unique capital letters, short for a Sound Channel):
+	my-channel is a channel with content name "myChannelContent" and content type "text".
 
-	Include (- Constant FYC_SOUND = ('S' * $1000000) + ('O' * $10000) + ('N' * $100) + 'D'; -);
+2. To use your channel:
 
-2. Create the phrase to use the new channel.
+	say "[on my-channel]This text will appear in your new channel.[end]";
 
-	To Select the Sound Channel:
-		(- if (is_fyrevm) FyreCall(FY_CHANNEL, FYC_SOUND); -);
+3. Alternate use:
+
+	select my-channel;
+	say "This text will appear in your new channel.";
+	select main-channel.
 	
-Required Channels:
+Standard Channels:
 
-Main (MAIN) - The main channel is meant to handle the regular text window output.
+main-channel - The main channel is meant to handle the regular text window output.
 
-Prompt (PRPT) - The prompt channel defaults to the common ">" caret, but can be altered to be anything.
+prompt-channel - The prompt channel defaults to the common ">" caret, but can be altered to be anything.
 
-Location (LOCN) - The location channel contains the current location name.
+location-channel - The location channel contains the current location name.
 
-Score (SCOR) - The score channel contains, if any is provided, the current score of the game.
+score-channel - The score channel contains, if any is provided, the current score of the game.
 
-Time (TIME) - The time channel contains the current number of turns or the current time.
+time-channel - The time channel contains the current number of turns or the current time.
 
-Death (DEAD) - The death channel contains any output that happens after the player dies. This is separated from the main text so that the UI can handle it contextually.
+death-channel - The death channel contains any output that happens after the player dies. This is separated from the main text so that the UI can handle it contextually.
 
-Turn (TURN) - The turn channel has the turn count, regardless if time is the primary timekeeping method.
+turn-channel - The turn channel has the turn count, regardless if time is the primary timekeeping method.
 
-Story Info (INFO) - The story info channel contains JSON with all of the banner and general story information.
+storyInfo-channel - The story info channel contains JSON with all of the banner and general story information.
 
-Score Notification (SNOT) - When scoring is used and the score changes, the change value (up or down) will be posted to this channel.
+scoreNotify-channel - When scoring is used and the score changes, the change value (up or down) will be posted to this channel.
 

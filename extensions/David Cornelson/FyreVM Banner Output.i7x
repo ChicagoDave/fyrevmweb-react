@@ -1,8 +1,6 @@
 FyreVM Banner Output by David Cornelson begins here.
 
-Include FyreVM Core by David Cornelson.
-
-Section 1 - Print the Banner when not using quixe-channels
+Section 1 - Print the Banner when not using channels
 
 Rule for printing the banner text when not outputting channels:
 	say "[bold type][story title][roman type][line break]";
