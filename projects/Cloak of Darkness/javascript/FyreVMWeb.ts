@@ -154,7 +154,10 @@ module FyreVMWeb {
                                     break;
                                 case "json":
                                     fyrevm[channelDetails[2]] = JSON.parse(this.ChannelData[channelName]);
+                                    break;
                             }
+
+                            break;
                         }
                     }
                 }

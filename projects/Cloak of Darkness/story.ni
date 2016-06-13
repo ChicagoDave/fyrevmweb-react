@@ -7,8 +7,13 @@ Include FyreVM Prologue by David Cornelson.
 The story headline is "A basic IF demonstration using FyreVM".
 The story creation year is 2016.
 
-When play begins while outputting channels (this is the prologue channel rule):
-	say "[on prologue-channel][paragraph break]Hurrying through the rainswept November night,	you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?[end]".
+When play begins when outputting channels (this is the prologue channel rule):
+	say "[on prologue-channel]Hurrying through the rainswept November night,	you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?[paragraph break][end]".
+
+When play begins when not outputting channels (this is the normal prologue rule):
+	say "Hurrying through the rainswept November night,	you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?[paragraph break]".
+
+The prologue channel rule is listed last in the when play begins rules.
 
 Use scoring.
 

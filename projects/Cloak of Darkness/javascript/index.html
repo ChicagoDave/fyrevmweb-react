@@ -66,9 +66,9 @@
             }
         } else {
             if (fyrevm.bannerContent == undefined) {
-                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<b>' + fyrevm.locationName + '</b>\n<span>' + fyrevm.mainContent.trim() + '</span>';
+                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/><br/><b>' + fyrevm.locationName + '</b>\n<span>' + fyrevm.mainContent.trim() + '</span>';
             } else {
-                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/>' + fyrevm.bannerContent + '<br/><b>' + fyrevm.locationName + '</b>\n<span>' + fyrevm.mainContent.trim() + '</span>';
+                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/><br/>' + fyrevm.bannerContent + '<br/><b>' + fyrevm.locationName + '</b>\n<span>' + fyrevm.mainContent.trim() + '</span>';
             }
         }
 
