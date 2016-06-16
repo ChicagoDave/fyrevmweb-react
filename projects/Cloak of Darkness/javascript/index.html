@@ -86,7 +86,10 @@
             document.getElementById('score').innerText = fyrevm.score;
 
         document.getElementById('turn').innerText = fyrevm.turn;
-        document.getElementById('time').innerText = fyrevm.time;
+        var h = (fyrevm.time/60).toFixed().toString();
+        var m = (fyrevm.time-((fyrevm.time/60).toFixed() * 60)).toString();
+        var time = ("00" + h).slice(-2) + ":" + ("00" + m).slice(-2);
+        document.getElementById('time').innerText = time;
         document.getElementById('prompt').innerText = fyrevm.prompt;
 
         // The story info is a JSON object to be handled separately...
