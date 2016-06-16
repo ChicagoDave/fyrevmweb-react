@@ -1,5 +1,6 @@
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre:400,700" rel="stylesheet">
     <script src="FyreVMWeb.js" ></script>
 	<style>
 		.header { display: inline-block; width: 30%; }
@@ -8,8 +9,8 @@
             font-family: "Courier New";
 			background-color: blue;
 			color: yellow;
-			height: 20pt;
-			font-size: 12pt;
+			font-size: 16pt;
+            font-weight: bold;
             width: 100%;
 		}
         .statusRight {
@@ -22,6 +23,10 @@
         }
 		#mainContent { height: 75%; overflow-y: scroll; margin: 20px 0; white-space: pre-wrap}
         #commandLine { width: 500px; border: none;}
+
+        .p-style {
+            font-family: 'Frank Ruhl Libre', sans-serif;
+        }
 	</style>
 </head>	
 
@@ -72,7 +77,6 @@
             }
         }
 
-
         // Set the location name...
         document.getElementById('locationName').innerText = fyrevm.locationName;
 
@@ -90,7 +94,6 @@
 
         // reset command line...
         manager.InputElement.value = '';
-        manager.InputElement.focus();
     };
 
     // set the input element...
@@ -104,6 +107,15 @@
         if (fyrevm.storyInfo != undefined) {
             storyInfo = fyrevm.storyInfo;
         }
+    }
+
+    // called from embedded links...
+    function sendCommand(command) {
+        manager.InputElement.value = command;
+
+        var event = new KeyboardEvent("keypress", {code : "Enter"});
+        event.eventPhase = 2;
+        manager.InputElement.dispatchEvent(event);
     }
 
 </script>

@@ -12,6 +12,10 @@
 
 var fyrevm = {};
 
+function isEnterKey(e) {
+    return e.code == "Enter";
+}
+
 module FyreVMWeb {
 
     export enum InputType {
@@ -60,7 +64,7 @@ module FyreVMWeb {
                 if (this.WaitingFor == FyreVMWeb.InputType.WAITING_FOR_KEY) {
                     this.SendCommand(this.InputElement.value);
                 } else {
-                    if (e.keyCode == 13) {
+                    if (e.keyCode == 13 || isEnterKey(e)) {
                         this.SendCommand(this.InputElement.value);
                     }
                 }
@@ -154,6 +158,9 @@ module FyreVMWeb {
                                     break;
                                 case "json":
                                     fyrevm[channelDetails[2]] = JSON.parse(this.ChannelData[channelName]);
+                                    break;
+                                case "css":
+                                    fyrevm[channelDetails[2]] = this.ChannelData[channelName];
                                     break;
                             }
 

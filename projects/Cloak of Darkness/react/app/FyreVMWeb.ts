@@ -8,7 +8,7 @@
 
  */
 
-/// <reference path='../../../../glulx-typescript/EngineWrapper.ts' />
+/// <reference path='../glulx-typescript/EngineWrapper.ts' />
 
 module FyreVMWeb {
 

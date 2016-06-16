@@ -1322,12 +1322,14 @@ storyInfo-channel is a channel with id 1229866575 and content name "storyInfo" a
 scoreNotify-channel is a channel with id 1397641044 and content name "scoreNotify" and content type "text".
 contentManagement-channel is a channel with id 1129138004 and content name "contentTypes" and content type "text".
 
-When play begins:
-	repeat with chan running through list of channels:
-		let id be the id of chan;
+When play begins while outputting channels (this is the content management rule):
+	repeat with C running through channels:
+		let id be the id of C;
 		if id is 0:
-			now the id of chan is the next channel id;
-		say "[on contentManagement-channel][id of chan],[content type of chan],[content name of chan];[end]";
+			now the id of C is the next channel id;
+		say "[on contentManagement-channel][id of C],[content type of C],[content name of C];[end]";
+
+The content management rule is listed first in the when play begins rules.
 
 To say on (C - channel) -- beginning say_channel -- running on: select C.
 To say end -- ending say_channel -- running on: select the main channel. 
@@ -1383,10 +1385,10 @@ To Request Transition:
 
 Chapter 6 - Story Info
 
-When play begins:
+When play begins while outputting channels:
 	write story info.
 
-Every turn while outputting channels (this is the story information rule):
+Every turn while outputting channels:
 	write story info.
 
 To write story info:
