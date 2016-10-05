@@ -63,25 +63,25 @@
         // Some authors may choose to append this to the mainContent element while others may
         // display a modal window...
 
-        // The VM returned undefined main content in testing with i7 Example game "Glass". Populate with content to show incomplete areas of the engine instead of page crash.
-        var mainCountentOut = "maincontent undefined";
+        // The VM returned undefined mainContent in testing with i7 Example game "Glass". Populate with content to show incomplete areas of the engine instead of page crash.
+        var mainContentOut = "mainContent undefined";
         if (fyrevm.mainContent != undefined)
         {
-            mainCountentOut = fyrevm.mainContent.trim();
+            mainContentOut = fyrevm.mainContent.trim();
         }
         if (fyrevm.prologueContent == undefined) {
             // This is the main content...if you're using a single scrolling window, you would
             // append this content to it...
             if (fyrevm.bannerContent == undefined) {
-                document.getElementById('mainContent').innerHTML = '<b>' + fyrevm.locationName + '</b><br/><span>' + mainCountentOut+ '</span>';
+                document.getElementById('mainContent').innerHTML = '<b>' + fyrevm.locationName + '</b><br/><span>' + mainContentOut+ '</span>';
             } else {
-                document.getElementById('mainContent').innerHTML = fyrevm.bannerContent + '<br/><b>' + fyrevm.locationName + '</b>\n<span>' + mainCountentOut + '</span>';
+                document.getElementById('mainContent').innerHTML = fyrevm.bannerContent + '<br/><b>' + fyrevm.locationName + '</b>\n<span>' + mainContentOut + '</span>';
             }
         } else {
             if (fyrevm.bannerContent == undefined) {
-                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/><br/><b>' + fyrevm.locationName + '</b>\n<span>' + mainCountentOut + '</span>';
+                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/><br/><b>' + fyrevm.locationName + '</b>\n<span>' + mainContentOut + '</span>';
             } else {
-                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/><br/>' + fyrevm.bannerContent + '<br/><b>' + fyrevm.locationName + '</b>\n<span>' + mainCountentOut + '</span>';
+                document.getElementById('mainContent').innerHTML = fyrevm.prologueContent.trim() + '<br/><br/>' + fyrevm.bannerContent + '<br/><b>' + fyrevm.locationName + '</b>\n<span>' + mainContentOut + '</span>';
             }
         }
 
