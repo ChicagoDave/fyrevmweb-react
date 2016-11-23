@@ -11,7 +11,6 @@ var redux_1 = require('redux');
 var react_redux_1 = require('react-redux');
 var app_1 = require('./components/app');
 var reducers_1 = require('./reducers');
-;
 function configureStore() {
     var store = redux_1.createStore(reducers_1.counterApp);
     if (module.hot) {

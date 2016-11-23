@@ -68,18 +68,16 @@ Simple I7 story with FyreVM extensions enabled.
 
 Full implementation of fyrevm-web using JavaScript in a simple HTML page.
 
-## Tools
+## Road Map
 
-### Road Map
-
-## Cloak of Darkness (standard template)
+### Cloak of Darkness (standard template)
 
 * Add scrolling main content
 * Add web menu for help, hints, settings, and about
 * Support undo
 * Support transcripts
 
-## Cloak of Darkness (paging template)
+### Cloak of Darkness (paging template)
 
 * Add paging main content
 * Support full paging control (page back/forward, jump to page)
