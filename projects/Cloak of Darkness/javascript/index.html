@@ -2,17 +2,17 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre:400,700" rel="stylesheet">
     <script src="FyreVMWeb.js" ></script>
-	<style>
-		.header { display: inline-block; width: 30%; }
-		body { padding-top: 40px; padding-left: 200px; padding-right: 200px;}
-		#statusLine {
+    <style>
+        .header { display: inline-block; width: 30%; }
+        body { padding-top: 40px; padding-left: 200px; padding-right: 200px;}
+        #statusLine {
             font-family: "Courier New";
-			background-color: blue;
-			color: yellow;
-			font-size: 16pt;
+            background-color: blue;
+            color: yellow;
+            font-size: 16pt;
             font-weight: bold;
             width: 100%;
-		}
+        }
         .statusRight {
             width: 50%;
             text-align: right;
@@ -21,20 +21,20 @@
             width: 50%;
             text-align: left;
         }
-		#mainContent { height: 75%; overflow-y: scroll; margin: 20px 0; white-space: pre-wrap; font-family: Georgia ; font-size: 1.1em;}
+        #mainContent { height: 75%; overflow-y: scroll; margin: 20px 0; white-space: pre-wrap; font-family: Georgia ; font-size: 1.1em;}
         #commandLine { width: 500px; border: none;}
 
         .p-style {
             font-family: 'Frank Ruhl Libre', sans-serif;
             font-size: 1.1em;
         }
-	</style>
-</head>	
+    </style>
+</head>
 
 <!-- This is your template. This defined how the user will see the content from your story. -->
 <body>
     <h1 id='title'>Cloak of Darkness</h1>
-	<table id='statusLine'>
+    <table id='statusLine'>
         <tr>
         <td class='statusLeft'>
             <span id='locationName'></span>
@@ -45,13 +45,13 @@
             Time:&nbsp;<span id='time'></span>&nbsp;&nbsp;
         </td>
         </tr>
-	</table>
-	<div id='mainContent'></div>
+    </table>
+    <div id='mainContent'></div>
     <div><span id='prompt'></span>&nbsp;&nbsp;<input id='commandLine' type="text"/></div>
 </body>
 
 <script>
-	
+
     var manager = new FyreVMWeb.Manager();
     var storyInfo = null;
     manager.OutputReady = function() {

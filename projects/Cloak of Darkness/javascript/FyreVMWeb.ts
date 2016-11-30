@@ -89,7 +89,9 @@ module FyreVMWeb {
         public ProcessCommand(result: FyreVM.EngineWrapperState) {
             this.Status = FyreVMWeb.StoryStatus.CONTINUE;
 
-            this.ChannelData = result.channelData;
+            if (result.channelData) {
+                this.ChannelData = result.channelData;
+            }
 
             this.UpdateContent();
 
@@ -105,7 +107,7 @@ module FyreVMWeb {
                     break;
                 case FyreVM.EngineState.waitingForLoadSaveGame:
                     this.saveKey = `fyrevm_saved_game_${Base64.fromByteArray(this.wrapper.getIFhd())}`;
-                    this.quetzalData = localStorage[this.saveKey];
+                    this.quetzalData = FyreVM.Quetzal.load(Base64.toByteArray(localStorage[this.saveKey]));
                     setTimeout(() => this.ProcessCommand(this.wrapper.receiveSavedGame(this.quetzalData)),0);
                     break;
                 case FyreVM.EngineState.waitingForGameSavedConfirmation:
