@@ -11,3 +11,4 @@ node_modules
 /glulx-typescript/*.js
 /glulx-typescript/*.map
 *.js.map
+*.swp

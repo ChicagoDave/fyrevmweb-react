@@ -12,7 +12,7 @@ declare const require: (name: String) => any;
 
 interface IHotModule {
   hot?: { accept: (path: string, callback: () => void) => void };
-};
+}
 
 declare const module: IHotModule;
 
