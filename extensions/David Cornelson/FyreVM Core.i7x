@@ -57,6 +57,7 @@ Constant FYC_TURN = ('T' * $1000000) + ('U' * $10000) + ('R' * $100) + 'N';	! TU
 Constant FYC_STORYINFO = ('I' * $1000000) + ('N' * $10000) + ('F' * $100) + 'O';	! INFO
 Constant FYC_SCORENOTIFY = ('S' * $1000000) + ('N' * $10000) + ('O' * $100) + 'T';	! SNOT
 Constant FYC_CONTENT_MANAGEMENT = ('C' * $1000000) + ('M' * $10000) + ('G' * $100) + 'T';  	! CMGT
+Constant FYC_IFID = ('I' * $1000000) + ('F' * $10000) + ('I' * $100) + 'D';  	! IFID
 
 ! Slots for FY_SETVENEER.
 Constant FYV_Z__Region = 1;
@@ -1288,6 +1289,24 @@ Include (-
 ];
 -)  instead of "Score Notification" in "Printing.i6t".
 
+Section 7 - IFID
+
+Include (-
+[ print_ifid ix;
+	for (ix=6: ix <= UUID_ARRAY->0: ix++) print (char) UUID_ARRAY->ix;
+];
+-).
+
+To print the Raw IFID: (- print_ifid(); -).
+
+To print the IFID:
+	select the ifid channel;
+	print the Raw IFID;
+	select the main channel.
+
+When play begins when outputting channels:
+	print the IFID.
+
 Chapter 3 - Standard Rules replacements
 
 This is the direct the final prompt to the prompt channel rule:
@@ -1320,14 +1339,23 @@ endgame-channel is a channel with id 1162757191 and content name "endGameContent
 turn-channel is a channel with id 1414877774 and content name "turn" and content type "number".
 storyInfo-channel is a channel with id 1229866575 and content name "storyInfo" and content type "json".
 scoreNotify-channel is a channel with id 1397641044 and content name "scoreNotify" and content type "text".
-contentManagement-channel is a channel with id 1129138004 and content name "contentTypes" and content type "text".
+contentManagement-channel is a channel with id 1129138004 and content name "contentTypes" and content type "json".
+ifid-channel is a channel with id 1229343044 and content name "ifid" and content type "text".
 
 When play begins while outputting channels (this is the content management rule):
+	select the content management channel;
+	say "[bracket]";
+	let cmrow be a number;
+	let cmrow be 0;
 	repeat with C running through channels:
+		if cmrow is greater than 0:
+			say ",";
 		let id be the id of C;
 		if id is 0:
 			now the id of C is the next channel id;
-		say "[on contentManagement-channel][id of C],[content type of C],[content name of C];[end]";
+		say "{ 'id': [id of C], 'contentType': '[content type of C]', 'contentName': '[content name of C]'}";
+		now cmrow is cmrow + 1;
+	say "[close bracket]";
 
 The content management rule is listed first in the when play begins rules.
 
@@ -1377,6 +1405,9 @@ To Select the Story Info Channel:
 
 To Select the Score Notification Channel:
 	select scoreNotify-channel.
+	
+To Select the IFID Channel:
+	select the ifid-channel.
 
 Chapter 5 - Transition Requested
 
