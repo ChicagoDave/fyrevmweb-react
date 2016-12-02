@@ -27,6 +27,16 @@
             background-color: dodgerblue;
         }
 
+        #listStoriesButton {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 5px 5px;
+            cursor: pointer;
+            border-radius: 8px;
+            color: white;
+            background-color: dodgerblue;
+        }
+
         #progress_bar {
             margin: 10px 0;
             padding: 3px;
@@ -52,6 +62,10 @@
         #message {
             display: none;
         }
+        
+        #storyListContainer {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -59,6 +73,7 @@
         <i class="fa fa-cloud-upload"></i> Select FyreVM Story
     </label>
     <input id="files" type="file"/>
+    <button id="listStoriesButton">List Stories</button>
     <div id="progress_bar"><div class="percent">0%</div></div>
     <div id="message">Story is already installed.</div>
     <hr/>
@@ -67,6 +82,8 @@
         <div id="banner"></div>
         <br/>
         <button id="installStoryButton">Install Story</button>
+    </div>
+    <div id="storyListContainer">
     </div>
 </body>
 <script src="FyreVMMem.js"></script>
@@ -81,6 +98,7 @@
     var fileData;
 
     var loadedData;
+    var StoryList;
 
     var self = this;
 
@@ -148,10 +166,8 @@
             var manager = new FyreVMMem.Manager();
             LoadedData = manager.LoadStory(reader_.result);
 
-            // this will overwrite any previously loaded but not installed story...
-            localStorage['loadedStory'] = LoadedData;
-
             displayLoadedStory();
+
         };
 
         // Read in the image file as binary string.
@@ -159,9 +175,37 @@
     };
 
 
-    // returns JSON contining [{ index: 0, storyInfo: {}, storyFile: [0,1,2,3], turnData: [ { turn: 1, command: '', dateTime: '', quetzal: [0,1,2,3], channels: [ { key: '', value: ''} ] ) ] }]
+    // returns JSON contining [{ key: UUID, storyInfo: {}, storyFile: [0,1,2,3], turnData: [ { turn: 1, command: '', dateTime: '', quetzal: [0,1,2,3], channels: [ { key: '', value: ''} ] ) ] }]
     this.getStoryList = function() {
+        var keys = getKeys(localStorage);
+        var storyList = [];
 
+        for (k=0; k < keys.length; k++) {
+            if (keys[k].substring(0,4) == 'fyre')
+                storyList.push(JSON.parse(localStorage.getItem(keys[k])));
+        }
+
+        StoryList = storyList;
+        displayStoryList();
+    };
+
+    this.displayStoryList = function() {
+
+        var container = get('storyListContainer');
+
+        // clear out list
+        while (container.hasChildNodes()) {
+            container.removeChild(container.lastChild);
+        }
+
+        for (s=0; s < StoryList.length; s++) {
+            var story = StoryList[s];
+            var div = document.createElement('div');
+            div.innerHTML = 'IFID: ' + story.key.replace('//','').replace('//','') + ' -- ' + story.turnData[0].bannerContent + '<hr>';
+            container.appendChild(div);
+        }
+
+        container.style.display = 'block';
     };
 
     this.getStoryByIndex = function(index) {
@@ -186,11 +230,12 @@
             }
         }
 
-        localStorage['fyrevm-' + newStory.key] = newStory;
+        localStorage['fyrevm-' + newStory.key] = JSON.stringify(newStory);
 
         get('storyFrame').style.display = 'none';
         get('message').innerText = 'Installed.';
         get('message').style.display = 'block';
+
     };
 
     this.getKeys = function(obj){
@@ -211,7 +256,7 @@
 
     this.displayLoadedStory = function() {
         if (checkExists(this.LoadedData.ifid)) {
-            get('message').innerText = 'Story already installed.';
+            get('message').innerHTML = 'Story already installed.';
             get('message').style.display = 'block';
             return;
         }
@@ -222,7 +267,9 @@
     };
 
     get(id).addEventListener('change', self.handleFileSelect, false);
-
-
+    get(id).onclick = function() {
+        this.value = null;
+    };
+    get('listStoriesButton').onclick = this.getStoryList;
 </script>
 </html>
