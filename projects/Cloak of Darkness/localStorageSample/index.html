@@ -17,7 +17,7 @@
             background-color: dodgerblue;
         }
 
-        #installStoryButton {
+        #install-story-button {
             border: 1px solid #ccc;
             display: inline-block;
             padding: 5px 5px;
@@ -27,7 +27,7 @@
             background-color: dodgerblue;
         }
 
-        #listStoriesButton {
+        #list-stories-button {
             border: 1px solid #ccc;
             display: inline-block;
             padding: 5px 5px;
@@ -37,7 +37,7 @@
             background-color: dodgerblue;
         }
 
-        #progress_bar {
+        #progress-bar {
             margin: 10px 0;
             padding: 3px;
             border: 1px solid #000;
@@ -48,22 +48,22 @@
             -o-transition: opacity 1s linear;
             -webkit-transition: opacity 1s linear;
         }
-        #progress_bar.loading {
+        #progress-bar.loading {
             opacity: 1.0;
         }
-        #progress_bar .percent {
+        #progress-bar .percent {
             background-color: #99ccff;
             height: auto;
             width: 0;
         }
-        #storyFrame {
+        #story-frame {
             display: none;
         }
         #message {
             display: none;
         }
         
-        #storyListContainer {
+        #story-list-container {
             display: none;
         }
     </style>
@@ -73,17 +73,17 @@
         <i class="fa fa-cloud-upload"></i> Select FyreVM Story
     </label>
     <input id="files" type="file"/>
-    <button id="listStoriesButton">List Stories</button>
-    <div id="progress_bar"><div class="percent">0%</div></div>
+    <button id="list-stories-button">List Stories</button>
+    <div id="progress-bar"><div class="percent">0%</div></div>
     <div id="message">Story is already installed.</div>
     <hr/>
-    <div id="storyFrame">
+    <div id="story-frame">
         <h3>Loaded Story</h3>
         <div id="banner"></div>
         <br/>
-        <button id="installStoryButton">Install Story</button>
+        <button id="install-story-button">Install Story</button>
     </div>
-    <div id="storyListContainer">
+    <div id="story-list-container">
     </div>
 </body>
 <script src="FyreVMMem.js"></script>
@@ -147,13 +147,13 @@
             alert('File read cancelled');
         };
         reader_.onloadstart = function(e) {
-            get('progress_bar').className = 'loading';
+            get('progress-bar').className = 'loading';
         };
         reader_.onload = function(e) {
             // Ensure that the progress bar displays 100% at the end.
             progress_.style.width = '100%';
             progress_.textContent = '100%';
-            setTimeout("get('progress_bar').className='';", 2000);
+            setTimeout("get('progress-bar').className='';", 1000);
         };
         reader_.onloadend = function(e) {
 
@@ -191,7 +191,7 @@
 
     this.displayStoryList = function() {
 
-        var container = get('storyListContainer');
+        var container = get('story-list-container');
 
         // clear out list
         while (container.hasChildNodes()) {
@@ -232,10 +232,10 @@
 
         localStorage['fyrevm-' + newStory.key] = JSON.stringify(newStory);
 
-        get('storyFrame').style.display = 'none';
+        get('story-frame').style.display = 'none';
         get('message').innerText = 'Installed.';
         get('message').style.display = 'block';
-
+        setTimeout("get('message').style.display='none';", 1000);
     };
 
     this.getKeys = function(obj){
@@ -258,18 +258,19 @@
         if (checkExists(this.LoadedData.ifid)) {
             get('message').innerHTML = 'Story already installed.';
             get('message').style.display = 'block';
+            setTimeout("get('message').style.display='none';", 1000);
             return;
         }
 
-        get('storyFrame').style.display = 'block';
+        get('story-frame').style.display = 'block';
         get('banner').innerHTML = this.LoadedData.bannerContent + "<br/><br/>IFID: " + this.LoadedData.ifid.replace('//','').replace('//','');
-        get('installStoryButton').onclick = this.installStory;
+        get('install-story-button').onclick = this.installStory;
     };
 
     get(id).addEventListener('change', self.handleFileSelect, false);
     get(id).onclick = function() {
         this.value = null;
     };
-    get('listStoriesButton').onclick = this.getStoryList;
+    get('list-stories-button').onclick = this.getStoryList;
 </script>
 </html>
