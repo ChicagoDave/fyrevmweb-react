@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="design1.css">
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <a id="story-title" class="navbar-brand" href="#">Story Title</a>
+            </div>
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Story</a>
+                        <ul class="dropdown-menu">
+                            <li><a id="install-story">Install New Story</a></li>
+                            <li><a id="list-stories">List Installed Stories</a></li>
+                            <li><a id="export-story">Export Story</a></li>
+                        </ul>
+
+                </li>
+                <li><a id="help-menu">Help</a></li>
+                <li><a id="hints-menu">Hints</a></li>
+                <li><a id="about-menu">About</a></li>
+            </ul>
+        </nav>
+        <div class="row" id="row-main">
+            <div class="col-md-9" id="content">
+                <div id="main-content">
+                    <b>Kitchen</b><br/>
+                    <p>You are in the kitchen. It's a brightly lit room with a large preparation island in the center, cabinets on one wall and a spare eating area on the other.</p>
+                </div>
+            </div>
+            <div class="col-md-3 sidebar" id="sidebar-help">
+                <div class="row inner-sidebar">
+                    <div class="col-md-10">
+                        <div><b>Help</b></div>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="close-sidebar">X</a>
+                    </div>
+                </div>
+                <p>This is the help system.</p>
+            </div>
+            <div class="col-md-3 sidebar" id="sidebar-hints">
+                <div class="row inner-sidebar">
+                    <div class="col-md-10">
+                        <div><b>Hints</b></div>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="close-sidebar">X</a>
+                    </div>
+                </div>
+                <p>This is the hint system.</p>
+            </div>
+            <div class="col-md-3 sidebar" id="sidebar-about">
+                <div class="row inner-sidebar">
+                    <div class="col-md-10">
+                        <div><b>Hints</b></div>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="close-sidebar">X</a>
+                    </div>
+                </div>
+                <p>This is the story information.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#help-menu").click(function () {
+                $("#sidebar-about").hide();
+                $("#sidebar-hints").hide();
+                $("#sidebar-help").show();
+
+                return false;
+            });
+
+            $("#hints-menu").click(function () {
+                $("#sidebar-about").hide();
+                $("#sidebar-help").hide();
+                $("#sidebar-hints").show();
+
+                return false;
+            });
+
+            $("#about-menu").click(function () {
+                $("#sidebar-help").hide();
+                $("#sidebar-hints").hide();
+                $("#sidebar-about").show();
+
+                return false;
+            });
+
+            $(".close-sidebar").click(function() {
+                $("#sidebar-help").hide();
+                $("#sidebar-hints").hide();
+                $("#sidebar-about").hide();
+
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

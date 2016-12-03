@@ -1,0 +1,25 @@
+#main-content {
+    border: 0px;
+}
+
+#row-main {
+    /* necessary to hide collapsed sidebar */
+    overflow-x: hidden;
+}
+
+#content {
+    /* for the animation */
+    transition: width 0.3s;
+}
+
+.sidebar {
+    /* for the animation */
+    transition: margin 0.3s;
+    border-left: 1px solid black;
+    display: none;
+}
+
+.inner-sidebar {
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+}
