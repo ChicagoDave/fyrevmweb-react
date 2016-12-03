@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress Eslint -->
 <html lang="en">
 <head>
     <title>FyreVM Design Template</title>
@@ -18,7 +19,7 @@
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown">Story</a>
                         <ul class="dropdown-menu">
-                            <li><a id="install-story">Install New Story</a></li>
+                            <li><a id="install-story" data-toggle="modal" data-target="#story-installer-modal">Install New Story</a></li>
                             <li><a id="list-stories">List Installed Stories</a></li>
                             <li><a id="export-story">Export Story</a></li>
                         </ul>
@@ -82,9 +83,44 @@
         </div>
     </div>
 
+    <div id="story-installer-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog model-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">FyreVM Story Installer</h4>
+                </div>
+                <label for="files" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> Select FyreVM Story
+                </label>
+                <input id="files" type="file"/>
+                <button id="list-stories-button">List Stories</button>
+                <div id="progress-bar"><div class="percent">0%</div></div>
+                <div id="message">Story is already installed.</div>
+                <hr/>
+                <div id="story-frame">
+                    <h3>Loaded Story</h3>
+                    <div id="banner"></div>
+                    <br/>
+                    <button id="install-story-button">Install Story</button>
+                </div>
+                <div id="story-list-container">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="FyreVMMem.js"></script>
+    <script src="design1.js"></script>
+
     <script>
         $(document).ready(function () {
             $("#help-menu").click(function () {
