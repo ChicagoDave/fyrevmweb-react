@@ -3,9 +3,12 @@
 Include FyreVM Core by David Cornelson.
 Include FyreVM Banner Output by David Cornelson.
 Include FyreVM Prologue by David Cornelson.
+Include FyreVM Simple Web Hints by David Cornelson.
 
 The story headline is "A basic IF demonstration using FyreVM".
 The story creation year is 2016.
+
+Chapter A - The Story
 
 When play begins when outputting channels (this is the prologue channel rule):
 	say "[on prologue-channel]Hurrying through the rainswept November night,	you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?[paragraph break][end]".
@@ -115,5 +118,31 @@ Instead of dropping or putting the cloak on when the player is not in the cloakr
 	say "This isn't the best place to leave a smart cloak lying around."
 
 Understand "hang [something preferably held] on [something]" as putting it on.
+
+Chapter H - Hints
+
+Table of Hint Categories (continued)
+visible	catid	title
+1	1	"Chapter 1 - In the beginning..."
+1	2	"Chapter 2 - In the light...";
+
+Table of Hint Questions (continued)
+visible	catid	qid	description
+1	1	1	"What do I do with this cloak?"
+1	1	2	"Why is it dark in here?"
+1	2	1	"What is the message on the floor?"
+
+Table of Hints (continued)
+catid	qid	hid	description
+1	1	1	"Maybe it belongs somewhere."
+1	1	2	"If there were only somewhere to hang it."
+1	1	3	"Hang it on the hook."
+1	2	1	"Do you have a light source?"
+1	2	2	"The light switch is somewhere."
+1	2	3	"The hook in the cloakroom is interesting."
+1	2	4	"After you hang up the cloak, things will get brighter!"
+2	1	1	"Don't go in the bar before hanging up the cloak."
+
+Chapter X - Testing
 
 Test me with "s / n / w / inventory / hang cloak on hook / e / s / read message".
