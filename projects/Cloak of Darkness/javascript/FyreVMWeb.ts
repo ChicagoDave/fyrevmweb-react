@@ -139,30 +139,30 @@ module FyreVMWeb {
                 // We only get the content definition on first turn... (may need to revisit this)
                 //
                 if (this.contentDefinition == undefined) {
-                    this.contentDefinition = this.ChannelData["CMGT"].split(';');
+                    this.contentDefinition = JSON.parse(this.ChannelData["CMGT"]);
                 }
 
                 fyrevm = {};
 
                 for (var channelName in this.ChannelData) {
 
-                    for (var channelDef in this.contentDefinition) {
-                        var channelDetails = this.contentDefinition[channelDef].split(',');
-                        var chanName = this.GetChannelName(Number(channelDetails[0]));
+                    for (var ch=0; ch < this.contentDefinition.length; ch++) {
+                        var channelDef = this.contentDefinition[ch];
+                        var chanName = this.GetChannelName(channelDef['id']);
                         if (chanName == channelName) {
 
-                            switch (channelDetails[1]) {
+                            switch (channelDef['contentType']) {
                                 case "text":
-                                    fyrevm[channelDetails[2]] = this.ChannelData[channelName];
+                                    fyrevm[channelDef['contentName']] = this.ChannelData[channelName];
                                     break;
                                 case "number":
-                                    fyrevm[channelDetails[2]] = Number(this.ChannelData[channelName]);
+                                    fyrevm[channelDef['contentName']] = Number(this.ChannelData[channelName]);
                                     break;
                                 case "json":
-                                    fyrevm[channelDetails[2]] = JSON.parse(this.ChannelData[channelName]);
+                                    fyrevm[channelDef['contentName']] = JSON.parse(this.ChannelData[channelName]);
                                     break;
                                 case "css":
-                                    fyrevm[channelDetails[2]] = this.ChannelData[channelName];
+                                    fyrevm[channelDef['contentName']] = this.ChannelData[channelName];
                                     break;
                             }
 

@@ -19,9 +19,12 @@ hint-channel is a channel with content name "hintContent" and content type "json
 To select the hint channel:
 	select hint-channel;
 
+When play begins when outputting channels:
+	emit hints.
+
 Every turn when outputting channels:
-	emit hints;
-	
+	emit hints.
+
 To emit hints:
 	select the hint channel;
 	say "[bracket]";
