@@ -1,0 +1,24 @@
+.Story {
+  text-align: center;
+}
+
+.Story-logo {
+  animation: Story-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.Story-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.Story-intro {
+  font-size: large;
+}
+
+@keyframes Story-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
