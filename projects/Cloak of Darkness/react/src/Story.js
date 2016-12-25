@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Story.css';
+import { Container, Header, Input, Grid, Menu } from 'semantic-ui-react'
 
 class Story extends Component {
   constructor(props) {
@@ -13,13 +13,14 @@ class Story extends Component {
   outputReady() {
     const fyrevm = window.fyrevm;
     this.setState(fyrevm);
+    this.fyrevm.InputElement.value = '';
     console.log(fyrevm);
   }
 
   componentDidMount() {
-    this.fyrevm.InputElement = document.getElementById('commandLine');
+    this.fyrevm.InputElement = document.getElementById('commandLine').firstChild;
     this.fyrevm.OutputReady = () => this.outputReady();
-    this.fyrevm.LoadStory(process.env.PUBLIC_URL + "/Cloak of Darkness.ulx");
+    this.fyrevm.LoadStory(process.env.PUBLIC_URL + '/Cloak of Darkness.ulx');
   }
 
   render() {
@@ -28,26 +29,40 @@ class Story extends Component {
       storyInfo = <p>Loading story</p>;
     } else {
       storyInfo = (
-        <div className="Story-info">
-          <div className="Story-title">
-            <h1>{this.state.storyInfo.storyTitle}</h1>
-          </div>
-          <div className="Story-location">
-            <h2>{this.state.locationName}</h2>
-          </div>
-          <div className="Story-mainContent">
-            <p>{this.state.mainContent}</p>
-          </div>
-        </div>
+        <Container textAlign='center'>
+          <Header as='h1'>{this.state.storyInfo.storyTitle}</Header>
+          <Header as='h2'>{this.state.locationName}</Header>
+          <p>{this.state.mainContent}</p>
+        </Container>
       );
     }
 
     return (
-      <div className="Story">
-        {storyInfo}
-        <div className="Story-input">
-          <input id="commandLine" type="text"/>
-        </div>
+      <div>
+      <Menu>
+        <Menu.Item>
+          FyreVM Prototype
+        </Menu.Item>
+      </Menu>
+      <Grid divided id='story'>
+        <Grid.Row>
+          <Grid.Column width={4}>
+            <Container textAlign='center'>
+              <Header sub>Score</Header>
+              <span>{this.state.score}</span>
+              <Header sub>Turn</Header>
+              <span>{this.state.turn}</span>
+              <Header sub>Time</Header>
+              <span>{this.state.time}</span>
+            </Container>
+          </Grid.Column>
+          <Grid.Column width={8}>
+            {storyInfo}
+            <br/>
+            <Input fluid placeholder='Command' id='commandLine' type='text'/>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
       </div>
     );
   }
