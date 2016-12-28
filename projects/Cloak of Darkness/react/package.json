@@ -4,7 +4,8 @@
   "private": true,
   "devDependencies": {
     "react-scripts": "0.8.1",
-    "semantic-ui": "^2.2.7"
+    "semantic-ui": "^2.2.7",
+	"gulp": "^3.9.1"
   },
   "dependencies": {
     "react": "^15.4.1",

@@ -116,22 +116,8 @@ processBase64Zcode('
 ! Non-comment lines are the names of files which are copied across when the
 ! release is made. Anything not listed here won't be copied.
 
-glulx-typescript\b64.js
-glulx-typescript\dictionary.js
-glulx-typescript\Engine.js
-glulx-typescript\EngineWrapper.js
-glulx-typescript\GlkWrapper.js
-glulx-typescript\MemoryAccess.js
-glulx-typescript\mersenne-twister.js
-glulx-typescript\Opcodec.js
-glulx-typescript\Opcodes.js
-glulx-typescript\Output.js
-glulx-typescript\Quetzal.js
-glulx-typescript\UlxImage.js
-glulx-typescript\Veneer.js
-fyrevmweb\FyreVMWeb.js
-fyrevmweb\FyreVMMem.js
-template\css\fyrevm-standard.css
-template\js\fyrevm-standard.js
-app.js
-
+FyreVMWeb.js
+fyrevm-standard.css
+fyrevm-standard.js
+index.js
+index.html
