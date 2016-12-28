@@ -11,6 +11,9 @@
     "react-dom": "^15.4.1",
     "semantic-ui-react": "^0.63.1"
   },
+  "optionalDependencies": {
+    "fsevents": "*"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
