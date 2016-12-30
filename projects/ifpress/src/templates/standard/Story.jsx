@@ -15,14 +15,15 @@ class Story extends Component {
             time: 0,
             storyInfo: { storyTitle: '' },
             locationName: '',
-            mainContent: 'Loading story'
+            mainContent: 'Loading story',
+            storyHistory: [],
+            inputHistory: [],
         };
         this.state = this.defaults;
     }
 
     outputReady() {
         const fyrevm = window.fyrevm;
-
         if (!fyrevm.mainContent) {
             this.setState(this.defaults);
         } else {
@@ -54,7 +55,8 @@ class Story extends Component {
                         <ScrollingContent
                             title={this.state.storyInfo.storyTitle}
                             location={this.state.locationName}
-                            content={this.state.mainContent}/>
+                            story={this.state.storyHistory}
+                            input={this.state.inputHistory}/>
                     </Grid.Column>
                 </Grid>
             </div>

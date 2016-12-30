@@ -14,8 +14,8 @@ export default class StatusLine extends Component {
     render() {
         return (
             <Container textAlign='center'>
-                <Label>Score</Label><span>{this.state.score}</span>
-                <Label>Turn</Label><span>{this.state.turn}</span>
+                <Label>Score</Label><span>{this.state.score}</span><br/><br/>
+                <Label>Turn</Label><span>{this.state.turn}</span><br/><br/>
                 <Label>Time</Label><span>{this.state.time}</span>
             </Container>
         );

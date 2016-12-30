@@ -83,6 +83,13 @@ module FyreVMWeb {
         }
 
         public SendCommand(command: string) {
+            if (!localStorage['currentStoryInputs']) {
+                localStorage['currentStoryInputs'] = JSON.stringify([]);
+            }
+            let newInputs = JSON.parse(localStorage['currentStoryInputs']);
+            newInputs.push(command);
+            localStorage['currentStoryInputs'] = JSON.stringify(newInputs);
+
             setTimeout( () => this.ProcessCommand(this.wrapper.receiveLine(command)), 0)
         }
 
@@ -91,6 +98,15 @@ module FyreVMWeb {
 
             if (result.channelData) {
                 this.ChannelData = result.channelData;
+
+                if (result.channelData['MAIN']) {
+                    if (!localStorage['currentStoryContent']) {
+                        localStorage['currentStoryContent'] = JSON.stringify([]);
+                    }
+                    let newContent = JSON.parse(localStorage['currentStoryContent']);
+                    newContent.push(result.channelData['MAIN']);
+                    localStorage['currentStoryContent'] = JSON.stringify(newContent);
+                }
             }
 
             this.UpdateContent();
@@ -170,6 +186,9 @@ module FyreVMWeb {
                         }
                     }
                 }
+
+                fyrevm['storyHistory'] = JSON.parse(localStorage['currentStoryContent'] || '[]');
+                fyrevm['inputHistory'] = JSON.parse(localStorage['currentStoryInputs'] || '[]');
 
             }
         }
