@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Input, Grid, Menu } from 'semantic-ui-react'
+import { StatusLine } from '../components/StandardStatusLine.js'
 
 class Story extends Component {
   constructor(props) {
@@ -45,17 +46,8 @@ class Story extends Component {
         </Menu.Item>
       </Menu>
       <Grid divided id='story'>
+        <StatusLine props={this.fyrevm}/>
         <Grid.Row>
-          <Grid.Column width={4}>
-            <Container textAlign='center'>
-              <Header sub>Score</Header>
-              <span>{this.state.score}</span>
-              <Header sub>Turn</Header>
-              <span>{this.state.turn}</span>
-              <Header sub>Time</Header>
-              <span>{this.state.time}</span>
-            </Container>
-          </Grid.Column>
           <Grid.Column width={8}>
             {storyInfo}
             <br/>
