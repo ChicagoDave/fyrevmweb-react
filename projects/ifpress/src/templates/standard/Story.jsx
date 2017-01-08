@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Input, Grid, Menu } from 'semantic-ui-react'
-import { StandardMenu } from '/components/StandardMenu.js'
-import { StatusLine } from '/components/StandardStatusLine.js'
-import { ScrollingContent } from '/components/ScrollingContent.js'
+import { StandardMenu } from '../../components/StandardMenu.js'
+import { StatusLine } from '../../components/StandardStatusLine.js'
+import { ScrollingContent } from '../../components/ScrollingContent.js'
 
 class Story extends Component {
     constructor(props) {
@@ -27,12 +27,6 @@ class Story extends Component {
     }
 
     render() {
-        let storyInfo;
-        if (!this.state.mainContent) {
-            storyInfo = <p>Loading story</p>;
-        } else {
-            storyInfo = <p>Loading {this.state.storyInfo.storyTitle}</p>;
-        }
 
         return (
             <div>
