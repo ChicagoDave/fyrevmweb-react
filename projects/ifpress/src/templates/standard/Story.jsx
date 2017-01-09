@@ -31,8 +31,12 @@ class Story extends Component {
             <div>
                 <StandardMenu props={this.state}/>
                 <Grid divided id="story">
-                    <StatusLine props={this.state}/>
-                    <p>Scrolling Content</p>
+                    <Grid.Column width={4}>
+                        <StatusLine props={this.state}/>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                        <p>Scrolling Content</p>
+                    </Grid.Column>
                 </Grid>
             </div>
         );

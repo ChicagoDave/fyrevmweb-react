@@ -13,15 +13,11 @@ export default class StatusLine extends Component {
 
     render() {
         return (
-            <Grid.Row>
-                <Grid.Column width={8}>
-                    <Container textAlign='right'>
-                        <Label sub>Score</Label><span>{this.state.score}</span>
-                        <Label sub>Turn</Label><span>{this.state.turn}</span>
-                        <Label sub>Time</Label><span>{this.state.time}</span>
-                    </Container>
-                </Grid.Column>
-            </Grid.Row>
+            <Container textAlign='center'>
+                <Label sub>Score</Label><span>{this.state.score}</span>
+                <Label sub>Turn</Label><span>{this.state.turn}</span>
+                <Label sub>Time</Label><span>{this.state.time}</span>
+            </Container>
         );
     }
 }
