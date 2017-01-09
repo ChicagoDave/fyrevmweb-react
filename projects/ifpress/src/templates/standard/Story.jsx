@@ -1,21 +1,35 @@
 import React, { Component } from 'react';
-import { Container, Header, Input, Grid, Menu } from 'semantic-ui-react'
-import { StandardMenu } from '../../components/StandardMenu.js'
-import { StatusLine } from '../../components/StandardStatusLine.js'
-import { ScrollingContent } from '../../components/ScrollingContent.js'
+import { Grid } from 'semantic-ui-react'
+import StandardMenu from '../../components/StandardMenu.js'
+import StatusLine from '../../components/StandardStatusLine.js'
+import ScrollingContent from '../../components/ScrollingContent.js'
 
 class Story extends Component {
     constructor(props) {
         super(props);
         const FyreVMWeb = window.FyreVMWeb;
-        const fyrevm = window.fyrevm;
         this.fyrevm = new FyreVMWeb.Manager();
-        this.state = fyrevm;
+        this.defaults = {
+            score: 0,
+            turn: 1,
+            time: 0,
+            storyInfo: { storyTitle: '' },
+            locationName: '',
+            mainContent: 'Loading story',
+            storyHistory: [],
+            inputHistory: [],
+        };
+        this.state = this.defaults;
     }
 
     outputReady() {
         const fyrevm = window.fyrevm;
-        this.setState(fyrevm);
+        if (!fyrevm.mainContent) {
+            this.setState(this.defaults);
+        } else {
+            this.setState(fyrevm);
+        }
+
         this.fyrevm.InputElement.value = '';
         console.log(fyrevm);
     }
@@ -27,13 +41,23 @@ class Story extends Component {
     }
 
     render() {
-
         return (
             <div>
-                <StandardMenu props="{this.state}"/>
-                <Grid divided id='story'>
-                    <StatusLine props={this.fyrevm}/>
-                    <ScrollingContent props="{this.fyrevm}"/>
+                <StandardMenu/>
+                <Grid divided id="story">
+                    <Grid.Column width={4}>
+                        <StatusLine
+                            score={this.state.score}
+                            turn={this.state.turn}
+                            time={this.state.time}/>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                        <ScrollingContent
+                            title={this.state.storyInfo.storyTitle}
+                            location={this.state.locationName}
+                            story={this.state.storyHistory}
+                            input={this.state.inputHistory}/>
+                    </Grid.Column>
                 </Grid>
             </div>
         );
