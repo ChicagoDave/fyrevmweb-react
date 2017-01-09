@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react'
-import { StandardMenu } from '../../components/StandardMenu.js'
-import { StatusLine } from '../../components/StandardStatusLine.js'
-import { ScrollingContent } from '../../components/ScrollingContent.js'
+import StandardMenu from '../../components/StandardMenu.js'
+import StatusLine from '../../components/StandardStatusLine.js'
+import ScrollingContent from '../../components/ScrollingContent.js'
 
 class Story extends Component {
     constructor(props) {
@@ -29,10 +29,10 @@ class Story extends Component {
     render() {
         return (
             <div>
-                <StandardMenu props="{this.state}"/>
-                <Grid divided id='story'>
-                    <StatusLine props="{this.fyrevm}"/>
-                    <ScrollingContent props="{this.fyrevm}"/>
+                <StandardMenu props={this.state}/>
+                <Grid divided id="story">
+                    <StatusLine props={this.state}/>
+                    <p>Scrolling Content</p>
                 </Grid>
             </div>
         );

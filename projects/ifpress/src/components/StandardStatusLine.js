@@ -4,7 +4,11 @@ import { Container, Label, Grid } from 'semantic-ui-react'
 export default class StatusLine extends Component {
     constructor(props) {
         super(props);
-        this.state = props.fyrevm;
+        this.state = props.fyrevm || {
+            score: 0,
+            turn: 1,
+            time: 0
+        }
     }
 
     render() {
