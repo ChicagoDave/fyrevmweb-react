@@ -8,14 +8,27 @@ class Story extends Component {
     constructor(props) {
         super(props);
         const FyreVMWeb = window.FyreVMWeb;
-        const fyrevm = window.fyrevm;
         this.fyrevm = new FyreVMWeb.Manager();
-        this.state = fyrevm;
+        this.defaults = {
+            score: 0,
+            turn: 1,
+            time: 0,
+            storyInfo: { storyTitle: '' },
+            locationName: '',
+            mainContent: 'Loading story'
+        };
+        this.state = this.defaults;
     }
 
     outputReady() {
         const fyrevm = window.fyrevm;
-        this.setState(fyrevm);
+
+        if (!fyrevm.mainContent) {
+            this.setState(this.defaults);
+        } else {
+            this.setState(fyrevm);
+        }
+
         this.fyrevm.InputElement.value = '';
         console.log(fyrevm);
     }
@@ -29,13 +42,19 @@ class Story extends Component {
     render() {
         return (
             <div>
-                <StandardMenu props={this.state}/>
+                <StandardMenu/>
                 <Grid divided id="story">
                     <Grid.Column width={4}>
-                        <StatusLine props={this.state}/>
+                        <StatusLine
+                            score={this.state.score}
+                            turn={this.state.turn}
+                            time={this.state.time}/>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                        <p>Scrolling Content</p>
+                        <ScrollingContent
+                            title={this.state.storyInfo.storyTitle}
+                            location={this.state.locationName}
+                            content={this.state.mainContent}/>
                     </Grid.Column>
                 </Grid>
             </div>
