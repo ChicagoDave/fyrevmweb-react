@@ -1,12 +1,11 @@
 #story {
   height: 90vh;
-  overflow: hidden;
 }
 
 .story-content {
   display: flex;
   flex-flow: column;
-  height: 100%;
+  height: 75vh;
 }
 
 .story-info {

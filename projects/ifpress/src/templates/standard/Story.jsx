@@ -44,17 +44,17 @@ class Story extends Component {
         return (
             <div>
                 <StandardMenu/>
-                <Grid divided id="story">
-                    <Grid.Column width={4}>
+                <Grid id="story">
+                    <Grid.Column width={4}/>
+                    <Grid.Column width={8}>
                         <StatusLine
+                            title={this.state.storyInfo.storyTitle}
+                            location={this.state.locationName}
                             score={this.state.score}
                             turn={this.state.turn}
                             time={this.state.time}/>
-                    </Grid.Column>
-                    <Grid.Column width={8}>
+                        <br/>
                         <ScrollingContent
-                            title={this.state.storyInfo.storyTitle}
-                            location={this.state.locationName}
                             story={this.state.storyHistory}
                             input={this.state.inputHistory}/>
                     </Grid.Column>

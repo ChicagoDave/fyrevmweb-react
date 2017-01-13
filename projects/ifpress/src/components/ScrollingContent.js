@@ -9,7 +9,7 @@
  */
 
 import React, { Component } from 'react';
-import { Container, Header, Input } from 'semantic-ui-react'
+import { Container, Input } from 'semantic-ui-react'
 
 export default class ScrollingContent extends Component {
     componentDidUpdate() {
@@ -32,11 +32,6 @@ export default class ScrollingContent extends Component {
 
         return (
             <div className='story-content'>
-                <Container className='story-info' textAlign='center'>
-                    <Header as='h1'>{this.props.title}</Header>
-                    <Header as='h2'>{this.props.location}</Header>
-                </Container>
-                <br/>
                 <Container className='story-scroll'>
                     {history}
                 </Container>

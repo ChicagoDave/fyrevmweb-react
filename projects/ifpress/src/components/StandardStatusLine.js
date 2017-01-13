@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
-import { Container, Label } from 'semantic-ui-react'
+import { Container, Grid, Header, Label } from 'semantic-ui-react'
 
 export default class StatusLine extends Component {
-    constructor(props) {
-        super(props);
-        this.state = props.fyrevm || {
-            score: 0,
-            turn: 1,
-            time: 0
-        }
-    }
-
     render() {
         return (
-            <Container textAlign='center'>
-                <Label>Score</Label><span>{this.state.score}</span><br/><br/>
-                <Label>Turn</Label><span>{this.state.turn}</span><br/><br/>
-                <Label>Time</Label><span>{this.state.time}</span>
+            <Container>
+                <Header as='h1' textAlign='center'>{this.props.title}</Header>
+                <Grid color='grey'>
+                    <Grid.Column width={8}>
+                        <Header>{this.props.location}</Header>
+                    </Grid.Column>
+                    <Grid.Column width={2}>
+                        <Label>Score</Label><span>{this.props.score}</span>
+                    </Grid.Column>
+                    <Grid.Column width={2}>
+                        <Label>Turn</Label><span>{this.props.turn}</span>
+                    </Grid.Column>
+                    <Grid.Column width={2}>
+                        <Label>Time</Label><span>{this.props.time}</span>
+                    </Grid.Column>
+                </Grid>
             </Container>
         );
     }
