@@ -29,21 +29,21 @@ You may wish to alter a template or create your own. In that case, you'll want t
 
 * Clone FyreVM-Web
 
-      git clone -g fyrevm-web 
-      
+      git clone -g fyrevm-web
+
 ### Build the standard template
 
-* cd fyrevm-web\projects\ifpress\
 * npm install
+* cd semantic; gulp buid; cd ..
 * npm run build
 
 ### Run the standard template locally
 
-* cd fyrevm-web\projects\ifpress\
 * npm install
+* cd semantic; gulp buid; cd ..
 * npm start
 
 ### Creating your own template
 
-* In the \fyrevm-web\ifpress\templates folder, create a new folder with your template name (e.g. threewindows)
+* In the /fyrevm-web/ifpress/templates folder, create a new folder with your template name (e.g. threewindows)
 * Copy the Standard template to your new folder and modify as needed.

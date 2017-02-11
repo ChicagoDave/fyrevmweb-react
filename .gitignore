@@ -1,16 +1,6 @@
-.idea
-/projects/Stop the IFPress!.inform/Index
-/projects/Stop the IFPress!.inform/Metadata.iFiction
-/projects/Stop the IFPress!.inform/Settings.plist
-/projects/Stop the IFPress!.inform/Release.blurb
-/projects/Stop the IFPress!.inform/manifest.plist
-/projects/Stop the IFPress!.inform/Skein.skein
-/projects/Stop the IFPress!.inform/Build
-node_modules
-*.js
-/glulx-typescript/*.js
-/glulx-typescript/*.map
+node_modules/
+build/
+semantic/
 *.js.map
 *.swp
-semantic
-typings
+.idea
