@@ -3,8 +3,9 @@
     "target": "es5",
     "sourceMap": true,
     "out": "build/FyreVMWeb.js",
-    "outDir": "../../public/"
+    "outDir": "build/"
   },
+  "exclude": [
     "glulx-typescript/example"
   ]
 }
