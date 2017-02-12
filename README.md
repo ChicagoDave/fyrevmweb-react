@@ -1,7 +1,10 @@
 # fyrevm-web
 
-FyreVM-Web is a web application platform for Inform 7 based Interactive Fiction stories. There is a standard template,
-standard components, and a reference to the glulx-typescript engine. The platform relies on glulx-typescript, fyrevm web manager, fyrevm memory manager, reactjs, and semantic-ui as its core components.
+FyreVM-Web is a web application platform for Inform 7 based Interactive Fiction
+stories. There is a standard template, standard components, and a reference to
+the glulx-typescript engine. The platform relies on glulx-typescript, fyrevm
+web manager, fyrevm memory manager, reactjs, and semantic-ui as its core
+components.
 
 ## Getting started
 
@@ -25,7 +28,8 @@ Other items will get "pulled" from various git repositories, including:
 
 ### Source code installation
 
-You may wish to alter a template or create your own. In that case, you'll want to clone or fork the entire repository and make your changes.
+You may wish to alter a template or create your own. In that case, you'll want
+to clone or fork the entire repository and make your changes.
 
 * Clone FyreVM-Web
 
@@ -35,15 +39,18 @@ You may wish to alter a template or create your own. In that case, you'll want t
 
 * npm install
 * cd semantic; gulp buid; cd ..
+* cd src/FyreVMWeb; tsc; cd ../..
 * npm run build
 
 ### Run the standard template locally
 
 * npm install
 * cd semantic; gulp buid; cd ..
+* cd src/FyreVMWeb; tsc; cd ../..
 * npm start
 
 ### Creating your own template
 
-* In the /fyrevm-web/ifpress/templates folder, create a new folder with your template name (e.g. threewindows)
+* In the src/templates folder, create a new folder with your template name
+  (e.g. threewindows)
 * Copy the Standard template to your new folder and modify as needed.
