@@ -4,3 +4,4 @@ semantic/
 *.js.map
 *.swp
 .idea
+public/FyreVMWeb.js
