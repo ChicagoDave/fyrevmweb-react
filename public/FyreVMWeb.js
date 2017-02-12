@@ -1,0 +1,1 @@
+../src/FyreVMWeb/build/FyreVMWeb.js

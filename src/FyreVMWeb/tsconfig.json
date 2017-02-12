@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "out": "build/FyreVMWeb.js",
+    "outDir": "build/"
+  },
+  "exclude": [
+    "glulx-typescript/example"
+  ]
+}

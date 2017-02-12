@@ -1,0 +1,3 @@
+[submodule "src/glulx-typescript"]
+	path = src/FyreVMWeb/glulx-typescript
+	url = https://github.com/thiloplanz/glulx-typescript.git

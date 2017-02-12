@@ -1,0 +1,23 @@
+#story {
+  height: 90vh;
+}
+
+.story-content {
+  display: flex;
+  flex-flow: column;
+  height: 75vh;
+}
+
+.story-info {
+  flex: 0 1 auto;
+}
+
+.story-scroll {
+  flex: 1 1 auto;
+  overflow: scroll;
+  outline: solid 1px lightgrey;
+}
+
+.story-input {
+  flex: 0 1 auto;
+}
