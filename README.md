@@ -39,6 +39,7 @@ to clone or fork the entire repository and make your changes.
 
 * npm install
 * cd semantic; gulp buid; cd ..
+* git submodule update
 * cd src/FyreVMWeb; tsc; cd ../..
 * npm run build
 
@@ -46,6 +47,7 @@ to clone or fork the entire repository and make your changes.
 
 * npm install
 * cd semantic; gulp buid; cd ..
+* git submodule update
 * cd src/FyreVMWeb; tsc; cd ../..
 * npm start
 
