@@ -24,11 +24,11 @@ export default class ScrollingContent extends Component {
         for (var i = 0; i < this.props.input.length; i++) {
             var story = this.props.story[i];
             var input = this.props.input[i];
-            history.push(<p>{story}</p>);
-            history.push(<p><strong>{input}</strong></p>);
+            history.push(<p key={"story-" + i}>{story}</p>);
+            history.push(<p key={"input-" + i}><strong>{input}</strong></p>);
         }
-        var lastStory = this.props.story.slice(-1)[0];
-        history.push(<p>{lastStory}</p>);
+        var lastStory = this.props.story[this.props.input.length];
+        history.push(<p key={"story-" + this.props.input.length}>{lastStory}</p>);
 
         return (
             <div className='story-content'>
