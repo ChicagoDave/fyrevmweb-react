@@ -12,7 +12,7 @@ export default class StatusLine extends Component {
         return (
             <Menu>
                 <Menu.Item header>FyreVM Prototype</Menu.Item>
-                <Dropdown as={Menu.Item} text='Stories'>
+                <Dropdown className='item' text='Stories'>
                     <Dropdown.Menu>
                         <Dropdown.Item text='Install New Story' />
                         <Dropdown.Item text='Save Story to File' />
