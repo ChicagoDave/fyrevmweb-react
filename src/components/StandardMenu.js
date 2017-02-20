@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react'
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 export default class StatusLine extends Component {
     state = {}

@@ -5,6 +5,9 @@
     "out": "../../public/FyreVMWeb.js",
     "outDir": "../../public/"
   },
+  "files": [
+    "FyreVMWeb.ts"
+  ],
   "exclude": [
     "glulx-typescript/example"
   ]
