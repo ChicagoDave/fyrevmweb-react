@@ -16,8 +16,7 @@ class Story extends Component {
             storyInfo: { storyTitle: '' },
             locationName: '',
             mainContent: 'Loading story',
-            storyHistory: [],
-            inputHistory: [],
+            content: []
         };
         this.state = this.defaults;
     }
@@ -53,8 +52,7 @@ class Story extends Component {
                             time={this.state.time}/>
                         <br/>
                         <ScrollingContent
-                            story={this.state.storyHistory}
-                            input={this.state.inputHistory}/>
+                            content={this.state.content}/>
                     </Grid.Column>
                 </Grid>
             </div>

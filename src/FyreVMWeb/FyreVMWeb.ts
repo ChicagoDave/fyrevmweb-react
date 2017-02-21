@@ -18,54 +18,68 @@ function isEnterKey(e) {
 
 module FyreVMWeb {
 
-    export enum InputType {
-        WAITING_FOR_KEY = 0,
-        WAITING_FOR_LINE = 1
+    export enum States {
+        INIT,
+        RESTORE_SESSION,
+        NEW_SESSION,
+        WAITING_FOR_KEY,
+        WAITING_FOR_LINE,
+        COMMAND,
+        SAVE,
+        UPDATE_SESSION
     }
 
     export enum StoryStatus {
-        CONTINUE = 0,
-        ENDED = 1
+        CONTINUE,
+        ENDED
     }
-
-    // export interface FyreVMManager {
-    //     LoadStory(url: string);
-    //     SendCommand(command: string): void;
-    //     ChannelData: FyreVM.ChannelData;
-    //     WaitingFor: InputType;
-    //     Status: StoryStatus;
-    //     SessionData: FyreVM.Quetzal;
-    //     OutputReady: () => void;
-    //     EngineState: number;
-    // }
 
     export class Manager {
 
         ChannelData: FyreVM.ChannelData;
-        WaitingFor: InputType;
+        State: States;
         Status: StoryStatus;
-        SessionData: FyreVM.Quetzal;
         OutputReady: () => void;
-        EngineState: number;
         InputElement: HTMLInputElement;
 
         private wrapper: FyreVM.EngineWrapper;
-        private saveKey: string;
-        private quetzalData: FyreVM.Quetzal;
         private contentDefinition: string[];
 
-        public LoadStory(url: string) {
+        private SetState(state: States) {
+            this.State = state;
 
+            switch(state) {
+                case States.INIT:
+                    this.Init();
+                    break;
+                case States.NEW_SESSION:
+                    this.NewSession();
+                    break;
+                case States.RESTORE_SESSION:
+                    this.RestoreSession();
+                    break;
+                case States.WAITING_FOR_LINE:
+                    break;
+                case States.COMMAND:
+                    this.SendCommand(this.InputElement.value);
+                    break;
+                case States.SAVE:
+                    this.SaveGame();
+                    break;
+            }
+        }
+
+        public LoadStory(url: string) {
             if (this.InputElement == undefined) {
                 throw "FyreVM.Manager.InputElement must be defined before loading a story.";
             }
 
             this.InputElement.onkeypress = (e)=> {
-                if (this.WaitingFor == FyreVMWeb.InputType.WAITING_FOR_KEY) {
-                    this.SendCommand(this.InputElement.value);
-                } else {
+                if (this.State == States.WAITING_FOR_KEY) {
+                    this.SetState(States.COMMAND);
+                } else if (this.State == States.WAITING_FOR_LINE) {
                     if (e.keyCode == 13 || isEnterKey(e)) {
-                        this.SendCommand(this.InputElement.value);
+                        this.SetState(States.COMMAND);
                     }
                 }
             };
@@ -76,68 +90,208 @@ module FyreVMWeb {
             reader.onreadystatechange = () => {
                 if (reader.readyState === XMLHttpRequest.DONE) {
                     this.wrapper = FyreVM.EngineWrapper.loadFromArrayBuffer(reader.response, true);
-                    this.ProcessCommand(this.wrapper.run());
+                    let run = this.wrapper.run();
+                    this.ProcessResult(run);
+                    this.SetState(States.INIT);
                 }
             }
             reader.send()
         }
 
-        public SendCommand(command: string) {
-            if (!localStorage['currentStoryInputs']) {
-                localStorage['currentStoryInputs'] = JSON.stringify([]);
-            }
-            let newInputs = JSON.parse(localStorage['currentStoryInputs']);
-            newInputs.push(command);
-            localStorage['currentStoryInputs'] = JSON.stringify(newInputs);
+        private GetSaveData() {
+            let saveKey = this.SaveKey();
+            let saveData = localStorage[saveKey];
+            if (saveData) { saveData = JSON.parse(saveData); }
+            return saveData;
+        }
 
-            setTimeout( () => this.ProcessCommand(this.wrapper.receiveLine(command)), 0)
+        private Init() {
+            let saveData = this.GetSaveData();
+
+            if (!saveData) {
+                this.SetState(States.NEW_SESSION);
+            } else {
+                this.SetState(States.RESTORE_SESSION);
+            }
+        }
+
+        private NewSession() {
+            let saveKey = this.SaveKey();
+            localStorage[saveKey] = JSON.stringify(this.NewSavedGame());
+            this.SetState(States.WAITING_FOR_LINE);
+        }
+
+        private RestoreSession() {
+            let result = this.wrapper.receiveLine('restore');
+            if (result.state != FyreVM.EngineState.waitingForLoadSaveGame) {
+                console.error('Error restoring saved game', result);
+            }
+
+            result = this.LoadSavedGame();
+
+            if (result.state != FyreVM.EngineState.waitingForLineInput) {
+                console.error('Error restoring saved game', result);
+            }
+
+            this.SetState(States.WAITING_FOR_LINE);
+            this.UpdateTurnData();
+            this.OutputReady();
+        }
+
+        public ProcessResult(result: FyreVM.EngineWrapperState) {
+            if (result.channelData) {
+                this.ChannelData = result.channelData;
+            }
+            this.UpdateContent();
+        }
+
+        private SendCommand(command: string) {
+            this.UpdateCommand(command);
+            console.log(command);
+            let result = this.wrapper.receiveLine(command);
+            this.ProcessCommand(result);
         }
 
         public ProcessCommand(result: FyreVM.EngineWrapperState) {
             this.Status = FyreVMWeb.StoryStatus.CONTINUE;
 
-            if (result.channelData) {
-                this.ChannelData = result.channelData;
+            this.ProcessResult(result);
 
-                if (result.channelData['MAIN']) {
-                    if (!localStorage['currentStoryContent']) {
-                        localStorage['currentStoryContent'] = JSON.stringify([]);
-                    }
-                    let newContent = JSON.parse(localStorage['currentStoryContent']);
-                    newContent.push(result.channelData['MAIN']);
-                    localStorage['currentStoryContent'] = JSON.stringify(newContent);
-                }
+            if (this.State == States.COMMAND) {
+                this.UpdateStory(result);
+                this.UpdateTurnData();
+                this.OutputReady();
             }
 
-            this.UpdateContent();
 
             switch (result.state) {
                 case FyreVM.EngineState.waitingForKeyInput:
-                    this.WaitingFor = FyreVMWeb.InputType.WAITING_FOR_KEY;
+                    if (this.State == States.COMMAND) { this.SetState(States.SAVE); }
+                    else { this.SetState(States.WAITING_FOR_KEY); }
                     break;
                 case FyreVM.EngineState.waitingForLineInput:
-                    this.WaitingFor = FyreVMWeb.InputType.WAITING_FOR_LINE;
+                    if (this.State == States.COMMAND) { this.SetState(States.SAVE); }
+                    else { this.SetState(States.WAITING_FOR_LINE); }
                     break;
                 case FyreVM.EngineState.completed:
                     this.Status = FyreVMWeb.StoryStatus.ENDED;
                     break;
                 case FyreVM.EngineState.waitingForLoadSaveGame:
-                    this.saveKey = `fyrevm_saved_game_${Base64.fromByteArray(this.wrapper.getIFhd())}`;
-                    this.quetzalData = FyreVM.Quetzal.load(Base64.toByteArray(localStorage[this.saveKey]));
-                    setTimeout(() => this.ProcessCommand(this.wrapper.receiveSavedGame(this.quetzalData)),0);
+                    this.LoadSavedGame();
                     break;
                 case FyreVM.EngineState.waitingForGameSavedConfirmation:
-                    let saveKey = `fyrevm_saved_game_${Base64.fromByteArray(result.gameBeingSaved.getIFhdChunk())}`;
-                    let quetzalData = result.gameBeingSaved.base64Encode();
-                    localStorage[saveKey] = quetzalData;
-                    setTimeout(() => this.ProcessCommand(this.wrapper.saveGameDone(true)), 0);
-                    break;
-                default:
-                    this.EngineState = result.state;
+                    this.UpdateSavedGame(result);
                     break;
             }
+        }
 
-            this.OutputReady();
+        private NewSavedGame() {
+            let storyInfo = JSON.parse(this.ChannelData['INFO']);
+
+            return {
+                story: {
+                    'ifid': '4BBD5C04-F83A-416F-A1C4-84BFAF808CA7',
+                    'title': storyInfo['storyTitle'],
+                    'storyInfo': storyInfo,
+                    'storyFile': ''
+                },
+                'sessions': [
+                    {
+                        'session': 1,
+                        'turns': 1,
+                        'content': [
+                            { 'turn': 1, 'command': '', 'content': '' }
+                        ],
+                        'data': [
+                        ]
+                    }
+                ]
+            }
+        }
+
+        private SaveGame() {
+            this.ProcessCommand(this.wrapper.receiveLine('save'));
+        }
+
+        private LoadSavedGame() {
+            let saveData = this.GetSaveData();
+            let turns = saveData['sessions'][0]['turns'];
+            let saveGameData = saveData['sessions'][0]['data'][turns - 1]['data'];
+            let quetzalData = FyreVM.Quetzal.load(Base64.toByteArray(saveGameData));
+            return this.wrapper.receiveSavedGame(quetzalData);
+        }
+
+        private UpdateSavedGame(result) {
+            let saveKey = this.SaveKey();
+            let saveData = localStorage[saveKey];
+
+            if (!saveData) {
+                saveData = this.NewSavedGame();
+            } else {
+                saveData = JSON.parse(saveData);
+            }
+
+            let turns = saveData['sessions'][0]['turns'];
+            saveData['sessions'][0]['data'][turns] = {
+                'turn': turns, 'data': result.gameBeingSaved.base64Encode()
+            };
+
+            localStorage[saveKey] = JSON.stringify(saveData);
+
+            this.ProcessCommand(this.wrapper.saveGameDone(true));
+        }
+
+        private LoadSession() {
+            let saveKey = this.SaveKey();
+            let saveData = localStorage[saveKey];
+            saveData = JSON.parse(saveData);
+            let session = saveData['sessions'][0];
+            return session;
+        }
+
+        private SaveSession(session) {
+            let saveKey = this.SaveKey();
+            let saveData = localStorage[saveKey];
+            saveData = JSON.parse(saveData);
+            saveData['sessions'][0] = session;
+            localStorage[saveKey] = JSON.stringify(saveData);
+        }
+
+        private UpdateCommand(command) {
+            let session = this.LoadSession();
+
+            session['turns']++;
+
+            session['content'].push({
+                turn: session['turns'],
+                command: command,
+                content: ''
+            });
+
+            this.SaveSession(session);
+        }
+
+        private UpdateStory(result) {
+            if (result.channelData && result.channelData['MAIN']) {
+                let content = result.channelData['MAIN'];
+                let session = this.LoadSession();
+                let turn = session['turns'];
+                session['content'][turn-1]['content'] = content;
+                this.SaveSession(session);
+            }
+        }
+
+        private UpdateTurnData() {
+            let saveKey = this.SaveKey();
+            let saveData = localStorage[saveKey];
+            if (!saveData) { return; }
+            saveData = JSON.parse(saveData);
+            let content = saveData['sessions'][0]['content'];
+            fyrevm['content'] = content;
+        }
+
+        private SaveKey() {
+            return 'fyrevm_saved_game_test';
         }
 
         private GetChannelName(x:number){
@@ -157,8 +311,6 @@ module FyreVMWeb {
                 if (this.contentDefinition == undefined) {
                     this.contentDefinition = JSON.parse(this.ChannelData["CMGT"]);
                 }
-
-                fyrevm = {};
 
                 for (var channelName in this.ChannelData) {
 
@@ -186,10 +338,6 @@ module FyreVMWeb {
                         }
                     }
                 }
-
-                fyrevm['storyHistory'] = JSON.parse(localStorage['currentStoryContent'] || '[]');
-                fyrevm['inputHistory'] = JSON.parse(localStorage['currentStoryInputs'] || '[]');
-
             }
         }
     }
