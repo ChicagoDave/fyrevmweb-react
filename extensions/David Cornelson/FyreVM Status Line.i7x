@@ -16,7 +16,7 @@ The Status Line has a truth state called Show Story Turn. The Show Story Time of
 
 Section 2 - Status Line channel for defining the status line details
 
-statusline-channel is a channel with content name "statusLineContent" and content type "text".
+statusline-channel is a channel with content name "statusLineContent" and content type "json".
 
 To define status line:
 	say "[on statusline-channel]{ 'showLocationName': [Show Location Name of The Status Line], 'showLocationAddendum': [Show Location Addendum of The Status Line], 'showStoryTime': [Show Story TIme of The Status Line], 'showStoryScore': [Show Story Score of The Status Line], 'showStoryTurn': [Show Story Turn of The Status Line] }[end]";
