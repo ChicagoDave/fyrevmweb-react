@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react'
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 export default class StatusLine extends Component {
     state = {}
@@ -12,7 +12,7 @@ export default class StatusLine extends Component {
         return (
             <Menu>
                 <Menu.Item header>FyreVM Prototype</Menu.Item>
-                <Dropdown as={Menu.Item} text='Stories'>
+                <Dropdown className='item' text='Stories'>
                     <Dropdown.Menu>
                         <Dropdown.Item text='Install New Story' />
                         <Dropdown.Item text='Save Story to File' />

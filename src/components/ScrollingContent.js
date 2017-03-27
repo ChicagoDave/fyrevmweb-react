@@ -19,16 +19,13 @@ export default class ScrollingContent extends Component {
     }
 
     render() {
-        // Story and input are two parallel arrays
         var history = [];
-        for (var i = 0; i < this.props.input.length; i++) {
-            var story = this.props.story[i];
-            var input = this.props.input[i];
-            history.push(<p>{story}</p>);
-            history.push(<p><strong>{input}</strong></p>);
+        for (var i = 0; i < this.props.content.length; i++) {
+            var input = this.props.content[i].command;
+            var story = this.props.content[i].content;
+            history.push(<p key={"input-" + i}><strong>{input}</strong></p>);
+            history.push(<p key={"story-" + i}>{story}</p>);
         }
-        var lastStory = this.props.story.slice(-1)[0];
-        history.push(<p>{lastStory}</p>);
 
         return (
             <div className='story-content'>

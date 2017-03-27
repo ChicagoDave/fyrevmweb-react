@@ -38,16 +38,14 @@ to clone or fork the entire repository and make your changes.
 ### Build the standard template
 
 * npm install
-* cd semantic; gulp buid; cd ..
-* git submodule update
+* git submodule init; git submodule update
 * cd src/FyreVMWeb; tsc; cd ../..
 * npm run build
 
 ### Run the standard template locally
 
 * npm install
-* cd semantic; gulp buid; cd ..
-* git submodule update
+* git submodule init; git submodule update
 * cd src/FyreVMWeb; tsc; cd ../..
 * npm start
 
