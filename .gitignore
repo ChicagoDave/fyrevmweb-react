@@ -5,3 +5,4 @@ semantic/
 *.swp
 .idea
 public/FyreVMWeb.js
+Settings.plist
