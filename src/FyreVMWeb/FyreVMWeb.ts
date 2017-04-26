@@ -190,7 +190,8 @@ module FyreVMWeb {
         private NewSaveGame() {
             let storyInfo = JSON.parse(this.ChannelData['INFO']);
             let ifid = this.ChannelData['IFID'].replace(/\//g, '');
-            let content = `Title: ${storyInfo['storyTitle']}\nHeadline: ${storyInfo['storyHeadline']}`;
+            let content = `<b>Title: </b>${storyInfo['storyTitle']}<br/>
+                <b>Headline: </b>${storyInfo['storyHeadline']}`;
 
             return {
                 story: {
