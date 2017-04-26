@@ -189,7 +189,7 @@ module FyreVMWeb {
 
         private NewSaveGame() {
             let storyInfo = JSON.parse(this.ChannelData['INFO']);
-            let ifid = this.ChannelData['IFID'].replace(/\//g, '');
+            let ifid = this.IFID();
             let content = `<b>Title: </b>${storyInfo['storyTitle']}<br/>
                 <b>Headline: </b>${storyInfo['storyHeadline']}`;
 
@@ -296,7 +296,14 @@ module FyreVMWeb {
         }
 
         private SaveKey() {
-            return 'fyrevm_saved_game_test';
+            return this.IFID();
+        }
+
+        private IFID() {
+            if (!this.IFID) {
+                this.IFID = this.ChannelData['IFID'].replace(/\//g, '');
+            }
+            return this.IFID;
         }
 
         private GetChannelName(x:number){
