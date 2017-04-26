@@ -221,7 +221,7 @@ module FyreVMWeb {
         private LoadSavedGame() {
             let saveData = this.GetSaveData();
             let turns = saveData['sessions'][0]['turns'];
-            let saveGameData = saveData['sessions'][0]['data'][turns - 1]['data'];
+            let saveGameData = saveData['sessions'][0]['data'][turns]['data'];
             let quetzalData = FyreVM.Quetzal.load(Base64.toByteArray(saveGameData));
             return this.wrapper.receiveSavedGame(quetzalData);
         }
