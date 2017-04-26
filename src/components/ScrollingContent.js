@@ -23,8 +23,12 @@ export default class ScrollingContent extends Component {
         for (var i = 0; i < this.props.content.length; i++) {
             var input = this.props.content[i].command;
             var story = this.props.content[i].content;
+
             history.push(<p key={"input-" + i}><strong>{input}</strong></p>);
-            history.push(<p key={"story-" + i}>{story}</p>);
+
+            // Allow HTML in the story content
+            story = { __html: story }
+            history.push(<p key={"story-" + i} dangerouslySetInnerHTML={story} />);
         }
 
         return (

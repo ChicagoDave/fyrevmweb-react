@@ -9,6 +9,12 @@ class Story extends Component {
         super(props);
         const FyreVMWeb = window.FyreVMWeb;
         this.fyrevm = new FyreVMWeb.Manager();
+
+        window.sendCommand = (value) => {
+          this.fyrevm.InputElement.value = value;
+          this.fyrevm.SetState(FyreVMWeb.States.COMMAND);
+        }
+
         this.defaults = {
             score: 0,
             turn: 1,

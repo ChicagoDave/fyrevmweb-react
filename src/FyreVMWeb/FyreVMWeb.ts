@@ -117,7 +117,9 @@ module FyreVMWeb {
 
         private NewSession() {
             let saveKey = this.SaveKey();
-            localStorage[saveKey] = JSON.stringify(this.NewSavedGame());
+            localStorage[saveKey] = JSON.stringify(this.NewSaveGame());
+            this.UpdateTurnData();
+            this.OutputReady();
             this.SetState(States.WAITING_FOR_LINE);
         }
 
@@ -185,12 +187,15 @@ module FyreVMWeb {
             }
         }
 
-        private NewSavedGame() {
+        private NewSaveGame() {
             let storyInfo = JSON.parse(this.ChannelData['INFO']);
+            let ifid = this.ChannelData['IFID'].replace(/\//g, '');
+            let content = `<b>Title: </b>${storyInfo['storyTitle']}<br/>
+                <b>Headline: </b>${storyInfo['storyHeadline']}`;
 
             return {
                 story: {
-                    'ifid': '4BBD5C04-F83A-416F-A1C4-84BFAF808CA7',
+                    'ifid': ifid,
                     'title': storyInfo['storyTitle'],
                     'storyInfo': storyInfo,
                     'storyFile': ''
@@ -200,7 +205,7 @@ module FyreVMWeb {
                         'session': 1,
                         'turns': 1,
                         'content': [
-                            { 'turn': 1, 'command': '', 'content': '' }
+                            { 'turn': 1, 'command': '', 'content': content }
                         ],
                         'data': [
                         ]
@@ -216,7 +221,7 @@ module FyreVMWeb {
         private LoadSavedGame() {
             let saveData = this.GetSaveData();
             let turns = saveData['sessions'][0]['turns'];
-            let saveGameData = saveData['sessions'][0]['data'][turns - 1]['data'];
+            let saveGameData = saveData['sessions'][0]['data'][turns]['data'];
             let quetzalData = FyreVM.Quetzal.load(Base64.toByteArray(saveGameData));
             return this.wrapper.receiveSavedGame(quetzalData);
         }
@@ -226,7 +231,7 @@ module FyreVMWeb {
             let saveData = localStorage[saveKey];
 
             if (!saveData) {
-                saveData = this.NewSavedGame();
+                saveData = this.NewSaveGame();
             } else {
                 saveData = JSON.parse(saveData);
             }
