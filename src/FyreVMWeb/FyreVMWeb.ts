@@ -44,6 +44,7 @@ module FyreVMWeb {
 
         private wrapper: FyreVM.EngineWrapper;
         private contentDefinition: string[];
+        private ifid: string;
 
         private SetState(state: States) {
             this.State = state;
@@ -189,7 +190,7 @@ module FyreVMWeb {
 
         private NewSaveGame() {
             let storyInfo = JSON.parse(this.ChannelData['INFO']);
-            let ifid = this.IFID();
+            let ifid = this.GetIFID();
             let content = `<b>Title: </b>${storyInfo['storyTitle']}<br/>
                 <b>Headline: </b>${storyInfo['storyHeadline']}`;
 
@@ -228,12 +229,13 @@ module FyreVMWeb {
 
         private UpdateSavedGame(result) {
             let saveKey = this.SaveKey();
-            let saveData = localStorage[saveKey];
+            let saveDataStr = localStorage[saveKey];
+            let saveData = null;
 
-            if (!saveData) {
+            if (!saveDataStr) {
                 saveData = this.NewSaveGame();
             } else {
-                saveData = JSON.parse(saveData);
+                saveData = JSON.parse(saveDataStr);
             }
 
             let turns = saveData['sessions'][0]['turns'];
@@ -296,14 +298,14 @@ module FyreVMWeb {
         }
 
         private SaveKey() {
-            return this.IFID();
+            return this.GetIFID();
         }
 
-        private IFID() {
-            if (!this.IFID) {
-                this.IFID = this.ChannelData['IFID'].replace(/\//g, '');
+        private GetIFID() {
+            if (!this.ifid) {
+                this.ifid = this.ChannelData['IFID'].replace(/\//g, '');
             }
-            return this.IFID;
+            return this.ifid;
         }
 
         private GetChannelName(x:number){
